@@ -1,0 +1,3696 @@
+:PROPERTIES:
+:ID: edf9a68c-f079-451b-8050-b95ab75ec892
+:END:
+#+title: 动手学深度学习v2
+#+FILETAGS: :º0_note:
+#+STARTUP: indent
+#+STARTUP: inlineimages
+#+ATTR_ORG: :width 500
+- tags :: 
+* 动手学深度学习 v2
+:PROPERTIES:
+:NOTER_DOCUMENT: ../../研究生/深度学习/d2l-zh-pytorch.pdf
+:END:
+https://zhuanlan.zhihu.com/p/38431213
+** [[file:d:/BaiduSyncdisk/foam-template-master/研究生/深度学习/ppt/part-0_1.pdf::%PDF-1.4][01 课程安排]]
+*** 目标
+介绍深度学习经典模型和最新模型：LeNet、ResNet、LSTM、BERT。。。
+机器学习基础：损失函数、目标函数、过拟合、优化
+实践：使用 pytorch 实现介绍的知识点；在真实数据上体验算法效果
+*** 内容
+深度学习基础：线性神经网络、多层感知机
+卷积神经网络：LeNet、AlexNet、VGG、Inception、ResNet
+循环神经网络：RNN、GRU、LSTM、seq2seq
+注意力机制：Attention、Transformer
+优化算法：SGD、Momentum、Adam
+高性能计算：并行、多 GPU、分布式
+计算机视觉：目标检测、语义分割
+自然语言处理：词嵌入、BERT
+*** 将会学到什么？
+[[file:./$2023111910430Image/_20231119_110245_m3ja6R.png]]
+*** 资源
+END:
+课程主页：https://courses.d2l.ai/zh-v2
+教材：https://zh-v2.d2l.ai/
+课程论坛讨论：https://discuss.d2l.ai/c/16
+Pytorch 论坛：https://discuss.pytorch.org/
+** DONE 前言
+CLOSED: [2023-11-24 Fri 21:58]
+:PROPERTIES:
+:NOTER_PAGE: (19 . 0.092917)
+:END:
+*** 图 1: 全书结构
+:PROPERTIES:
+:NOTER_PAGE: 22
+:END:
+[[file:./$2023111910430Image/_20231119_111024_0KmyWa.png]]
+*** 02 [[file:d:/BaiduSyncdisk/foam-template-master/研究生/深度学习/ppt/part-0_2.pdf][深度学习的介绍]]
+1 图片分类
+2 物体检测和分割
+3 样式迁移
+4 人脸合成
+5 文字生成图片
+6 文字生成
+7 无人驾驶
+
+预测结果：数据->特征提取->训练模型->输出结果
+模型获取：以往数据+已有输出->模型
+** 03 [[file:d:/BaiduSyncdisk/foam-template-master/研究生/深度学习/ppt/part-0_3.pdf][安装]]
+:PROPERTIES:
+:NOTER_PAGE: (27 . 0.092917)
+:END:
+[[id:2023-11-19T120056][深度学习软件的安装conda、jupyter notebook]]
+*** 版本
+#+begin_src shell
+$ python --version
+Python 3.9.18
+$ conda list scikit-learn
+# packages in environment at /home/jzdxdd/miniconda3/envs/d2l:
+#
+# Name                    Version                   Build  Channel
+scikit-learn              1.0.2            py39h51133e4_1
+#+end_src
+
+#+begin_src shell
+conda install scipy==1.11.3
+conda install numpy==1.22.2
+conda install pandas==1.4.0
+conda install matplotlib==3.5.1
+conda install scikit-learn==1.0.2
+
+conda install -c conda-forge xgboost # 从conda-forge渠道安装
+conda install -c conda-forge lightgbm
+#+end_src
+** 符号
+:PROPERTIES:
+:NOTER_PAGE: (31 . 0.092917)
+:END:
+** 引言
+:PROPERTIES:
+:NOTER_PAGE: (35 . 0.092917)
+:END:
+*** 日常生活中的机器学习
+:PROPERTIES:
+:NOTER_PAGE: (36 . 0.185619)
+:END:
+*** 机器学习中的关键组件
+:PROPERTIES:
+:NOTER_PAGE: (37 . 0.649268)
+:END:
+**** 数据
+:PROPERTIES:
+:NOTER_PAGE: (38 . 0.092917)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (39 . 0.092917)
+:END:
+**** 目标函数
+:PROPERTIES:
+:NOTER_PAGE: (39 . 0.243965)
+:END:
+**** 优化算法
+:PROPERTIES:
+:NOTER_PAGE: (39 . 0.722639)
+:END:
+*** 各种机器学习问题
+:PROPERTIES:
+:NOTER_PAGE: (40 . 0.092917)
+:END:
+**** 监督学习
+:PROPERTIES:
+:NOTER_PAGE: (40 . 0.213548)
+:END:
+***** 回归
+:PROPERTIES:
+:NOTER_PAGE: (41 . 0.125076)
+:END:
+***** 分类
+:PROPERTIES:
+:NOTER_PAGE: (41 . 0.655985)
+:END:
+***** 标记问题
+:PROPERTIES:
+:NOTER_PAGE: (43 . 0.092917)
+:END:
+***** 搜索
+:PROPERTIES:
+:NOTER_PAGE: (44 . 0.125429)
+:END:
+***** 推荐系统
+:PROPERTIES:
+:NOTER_PAGE: (44 . 0.390732)
+:END:
+***** 序列学习
+:PROPERTIES:
+:NOTER_PAGE: (45 . 0.660758)
+:END:
+**** 无监督学习
+:PROPERTIES:
+:NOTER_PAGE: (47 . 0.092917)
+:END:
+**** 与环境互动
+:PROPERTIES:
+:NOTER_PAGE: (47 . 0.614306)
+:END:
+**** 强化学习
+:PROPERTIES:
+:NOTER_PAGE: (48 . 0.615985)
+:END:
+*** 起源
+:PROPERTIES:
+:NOTER_PAGE: (50 . 0.092917)
+:END:
+*** 深度学习的发展
+:PROPERTIES:
+:NOTER_PAGE: (51 . 0.622967)
+:END:
+*** 深度学习的成功案例
+:PROPERTIES:
+:NOTER_PAGE: (53 . 0.444773)
+:END:
+*** 特点
+:PROPERTIES:
+:NOTER_PAGE: (55 . 0.092917)
+:END:
+** 预备知识
+:PROPERTIES:
+:NOTER_PAGE: (57 . 0.092917)
+:END:
+*** DONE [[file:d:/BaiduSyncdisk/foam-template-master/研究生/深度学习/ppt/part-0_4.pdf][04 数据操作]]
+CLOSED: [2023-11-21 Tue 19:47]
+:PROPERTIES:
+:NOTER_PAGE: (58 . 0.092917)
+:END:
+[[file:d:/BaiduSyncdisk/foam-template-master/研究生/深度学习/d2l-zh/pytorch/chapter_preliminaries/ndarray.ipynb][ipynb]]
+**** 入门
+:PROPERTIES:
+:NOTER_PAGE: (58 . 0.319495)
+:END:
+| touch.arrange(num)            | 创建行向量              |
+| .shape                        | 访问形状                |
+| .numel()                      | 返回大小                |
+| .reshape(num1,num2)           | 改变形状不改变元素数量和值 |
+| torch.zeros((num1,num2,num3)) | 全 0                   |
+| torch.ones((num1,num2,num3))  | 全 1                   |
+| torch.randn(3,4)              | 正态随机                |
+**** 运算符
+:PROPERTIES:
+:NOTER_PAGE: (60 . 0.614053)
+:END:
+按元素（elementwise）运算
+***** 连结（concatenate）
+轴 0⇒行拼
+轴 1⇒列拼
+
+#+begin_src python
+torch.cat((X, Y), dim=0), torch.cat((X, Y), dim=1)
+#+end_src
+***** 比较
+***** .sum()求和
+**** 广播机制
+:PROPERTIES:
+:NOTER_PAGE: (62 . 0.363813)
+:END:
+矩阵若缺少则复制另外矩阵的相同位置
+**** 索引和切片
+:PROPERTIES:
+:NOTER_PAGE: (63 . 0.187146)
+:END:
+***** 访问元素:与[)
+[[file:./$2023111910430Image/_20231119_161843_pVOHj9.png]]
+***** n 维数组
+:PROPERTIES:
+:NOTER_PAGE: 58
+:END:
+****** n 维数组，也称为张量（tensor）
+****** 创建数组需要
+形状、每个元素数据类型、每个元素的值
+**** 节省内存
+:PROPERTIES:
+:NOTER_PAGE: (64 . 0.092917)
+:END:
+id()函数：提供了内存中引用对象的确切地址。
+用切片表示法执行原地操作：
+#+begin_src python
+Y[:]= <expression>
+#+end_src
+**** 转换为其他 Python 对象
+:PROPERTIES:
+:NOTER_PAGE: (65 . 0.092917)
+:END:
+torch 张量和 numpy 数组将共享它们的底层内存
+.item
+*** DONE 数据预处理
+CLOSED: [2023-11-21 Tue 21:29]
+:PROPERTIES:
+:NOTER_PAGE: (65 . 0.728093)
+:END:
+pandas 软件包
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (66 . 0.092917)
+:END:
+#+begin_src python
+  import os
+  os.makedirs(os.path.join('..', 'data'), exist_ok=True)
+  data_file = os.path.join('..', 'data', 'house_tiny.csv')
+  with open(data_file, 'w') as f:
+      f.write('NumRooms,Alley,Price\n')  # 列名
+    
+  # !pip install pandas
+  import pandas as pd
+
+  data = pd.read_csv(data_file)
+  print(data)
+#+end_src
+**** 处理缺失值
+:PROPERTIES:
+:NOTER_PAGE: (66 . 0.701553)
+:END:
+***** 方法：插值法、删除法
+***** 位置索引 iloc
+***** inputs.mean()的版本问题
+data.iloc[:, 0:2]
+当使用 Pandas2.*版本的时候，将无法通过 inputs.mean()直接进行填充。需要选中相应的列，计算均值，然后相应处理。 其次，在 Pandas2.*版本下，pd.get_dummies()返回值将是 True 与 False 的形式，但与 1, 0 是通用的。
+如果遇到 inputs = inputs.fillna(inputs.mean())报错：TypeError: can only concatenate str (not “int”) to str 可以采用：inputs = inputs.fillna(inputs.select_dtypes(include='number').mean())
+**** 转换为张量格式
+:PROPERTIES:
+:NOTER_PAGE: (67 . 0.559798)
+:END:
+.to_numpy
+*** TODO 线性代数
+:PROPERTIES:
+:NOTER_PAGE: (68 . 0.357551)
+:END:
+**** 标量
+:PROPERTIES:
+:NOTER_PAGE: (68 . 0.493422)
+:END:
+指数 x**y $x^y$
+**** 向量
+:PROPERTIES:
+:NOTER_PAGE: (69 . 0.151174)
+:END:
+***** 长度、维度和形状
+:PROPERTIES:
+:NOTER_PAGE: (70 . 0.092917)
+:END:
+#+begin_src python
+.arrange
+len(x)
+x.shape
+#+end_src
+**** 矩阵
+:PROPERTIES:
+:NOTER_PAGE: (70 . 0.523359)
+:END:
+矩阵转置 A.T
+***** 特殊矩阵
+****** 正交矩阵
+****** TODO 置换矩阵
+置换矩阵就是重新排列后的单位矩阵
+[[file:./mainImage/screenshot_20231122_191442.png]]
+**** 张量
+:PROPERTIES:
+:NOTER_PAGE: (72 . 0.295278)
+:END:
+**** 张量算法的基本性质
+:PROPERTIES:
+:NOTER_PAGE: (72 . 0.708977)
+:END:
+***** 矩阵复制
+B = A.clone()
+***** 矩阵乘法
+两个矩阵的按元素乘法称为 Hadamard 积（Hadamard product）
+$A B \neq A \odot B$
+A*B
+**** 降维
+:PROPERTIES:
+:NOTER_PAGE: (74 . 0.234318)
+:END:
+#+begin_src python
+A_sum_axis0 = A.sum(axis=0)
+A_sum_axis1 = A.sum(axis=1)
+A.sum(axis=[0, 1]) # 结果和A.sum()相同
+
+A.mean(), A.sum() / A.numel()
+A.mean(axis=0), A.sum(axis=0) / A.shape[0]
+#+end_src
+***** 非降维求和
+:PROPERTIES:
+:NOTER_PAGE: (75 . 0.498106)
+:END:
+#+begin_src python
+sum_A = A.sum(axis=1, keepdims=True)
+#+end_src
+沿某个轴计算 A 元素的累积总和，比如 axis=0（按行计算），可以调用 cumsum 函数
+#+begin_src python
+A.cumsum(axis=0)
+#+end_src
+**** 点积（Dot Product）
+:PROPERTIES:
+:NOTER_PAGE: (76 . 0.417172)
+:END:
+#+begin_src python
+torch.dot(x, y)
+#+end_src
+当权重为非负数且和为 1（即$ ( \sum _ { i = 1 } ^ { d } w _ { i } = 1 )  $）时，点积表示加权平均（weighted average）。
+**** TODO 矩阵-向量积
+:PROPERTIES:
+:NOTER_PAGE: (77 . 0.092917)
+:END:
+#+begin_src python
+torch.mv(A, x)
+#+end_src
+https://blog.csdn.net/zhinanpolang/article/details/104957513
+**** 矩阵-矩阵乘法
+:PROPERTIES:
+:NOTER_PAGE: (77 . 0.638763)
+:END:
+#+begin_src python
+torch.mm(A, B)
+#+end_src
+**** 范数（norm）
+:PROPERTIES:
+:NOTER_PAGE: (78 . 0.621199)
+:END:
+***** 向量范数的性质
+向量范数是将向量映射到标量的函数 f
+$f ( a \mathbf{x} ) = | \alpha | f ( \mathbf{x} )$
+$ f(\mathbf{x}+\mathbf{y}) \leq f(\mathbf{x})+f(\mathbf{y})$
+$f(\mathbf{x}) \geq 0 $
+$\forall i,[\mathbf{x}]_i=0 \Leftrightarrow f(\mathbf{x})=0$
+***** $L_2$范数
+$\|\mathbf{x}\|_2=\|\mathbf{x}\|=\sqrt{\sum_{i=1}^n x_i^2}$
+#+begin_src python
+torch.norm(u)
+#+end_src
+***** $L_1$范数
+$\|\mathbf{x}\|_1=\sum_{i=1}^n\left|x_i\right|$
+#+begin_src python
+torch.abs(u).sum()
+#+end_src
+***** $L_p$范数
+$\|\mathbf{x}\|_p=\left(\sum_{i=1}^n\left|x_i\right|^p\right)^{1 / p}$
+***** 矩阵的范数
+****** TODO 矩阵范数
+https://zhuanlan.zhihu.com/p/507328276
+[[file:./mainImage/screenshot_20231122_190351.png]]
+[[file:./mainImage/screenshot_20231122_191601.png]]
+****** Frobenius 范数
+ 矩阵 $\mathbf{X} \in \mathbb{R}^{m \times n}$ 的 Frobenius 范数 (Frobenius norm) 是矩阵元素平方和的平方根:
+$\|\mathbf{X}\|_F=\sqrt{\sum_{i=1}^m \sum_{j=1}^n x_{i j}^2} $
+*Frobenius* 范数满足向量范数的所有性质，它就像是矩阵形向量的 L2 范数
+#+begin_src python
+torch.norm(torch.ones((4, 9)))
+#+end_src
+**** 范数和目标
+:PROPERTIES:
+:NOTER_PAGE: (80 . 0.200581)
+:END:
+试图解决优化问题：最大化分配给观测数据的概率;
+最小化预测和真实观测之间的距离。
+**** 关于线性代数的更多信息
+:PROPERTIES:
+:NOTER_PAGE: (80 . 0.323523)
+:END:
+https://d2l.ai/chapter_appendix-mathematics-for-deep-learning/geometry-linear-algebraic-ops.html
+*** TODO 微积分
+:PROPERTIES:
+:NOTER_PAGE: (81 . 0.401578)
+:END:
+**** 将拟合模型的任务分解为两个关键问题：
+***** 优化（optimization）：
+用模型拟合观测数据的过程；
+***** 泛化（generalization）：
+数学原理和实践者的智慧，能够指导我们生成出有效性超出用于训练的数据集本身的模型。
+**** 导数和微分
+:PROPERTIES:
+:NOTER_PAGE: (82 . 0.19154)
+:END:
+***** %matplotlib inline
+是在 Jupyter Notebook 中使用的魔术命令（magic command），它用于在 notebook 中嵌入
+matplotlib 绘图，并将图像直接显示在 notebook 中而不是弹出一个新窗口。
+***** f-string 来格式化输出
+***** 注释#@save 是一个特殊的标记，会将对应的函数、类或语句保存在 d2l 包
+#+begin_src python
+#@save
+# X和Y轴的数据，x轴和y轴的标签，图例，坐标轴的范围等
+def plot(X, Y=None, xlabel=None, ylabel=None, legend=None, xlim=None,
+         ylim=None, xscale='linear', yscale='linear',
+         fmts=('-', 'm--', 'g-.', 'r:'), figsize=(3.5, 2.5), axes=None):
+    """绘制数据点"""
+    # 如果没有传入图例参数，则将图例设置为空列表
+    if legend is None:
+        legend = []
+
+    # 调用set_figsize函数设置图形的大小
+    set_figsize(figsize)
+    # 如果没有传入axes参数，则获取当前活动的图形对象。
+    axes = axes if axes else d2l.plt.gca()
+
+    # 如果X有一个轴，输出True
+    def has_one_axis(X):
+        return (hasattr(X, "ndim") and X.ndim == 1 or isinstance(X, list)
+                and not hasattr(X[0], "__len__"))
+
+    # 如果X只有一个轴，则将其转换为列表
+    if has_one_axis(X):
+        X = [X]
+
+    # 如果Y为空，则将X和Y都设置为长度为X长度的空列表。如果Y只有一个轴，则将其转换为列表。
+    if Y is None:
+        X, Y = [[]] * len(X), X
+    elif has_one_axis(Y):
+        Y = [Y]
+
+    # 如果X和Y的长度不相等，则将X复制为与Y相同长度的列表
+    if len(X) != len(Y):
+        X = X * len(Y)
+
+    # 清除当前图形对象的所有轴
+    axes.cla()
+
+    for x, y, fmt in zip(X, Y, fmts):
+        if len(x):
+            axes.plot(x, y, fmt)
+        else:
+            axes.plot(y, fmt)
+            
+    # 使用zip函数将X、Y和fmts进行迭代，根据fmts中的格式绘制数据点。
+    set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend)
+#+end_src
+***** 绘制图形
+#+begin_src python
+  x = np.arange(0, 3, 0.1)
+  plot(x, [f(x), 2 * x - 3], 'x', 'f(x)', legend=['f(x)', 'Tangent line (x=1)'])
+
+  import numpy as np
+  from d2l import torch as d2l
+  import os
+  os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+  x = np.arange(0.5, 3, 0.2)
+  d2l.plot(x, [x ** 3 - 1 / x, 4 * x - 4], 'x', 'f(x)', legend=['f(x)', 'Tangent line (x=1)'])
+  d2l.plt.show();
+#+end_src
+**** 偏导数
+:PROPERTIES:
+:NOTER_PAGE: (86 . 0.092917)
+:END:
+**** TODO [[file:/mnt/d/BaiduSyncdisk/foam-template-master/研究生/深度学习/ppt/part-0_6.pdf][06梯度]]
+:PROPERTIES:
+:NOTER_PAGE: (86 . 0.344987)
+:END:
+***** $\partial y / \partial \mathbf{x}$
+导数拓展到向量
+[[file:./$2023111910430Image/_20231122_223519_wlsrba.png]]
+[[file:./$2023111910430Image/_20231122_223715_kdpVpy.png]]
+***** $\partial \mathbf{y} / \partial x$
+[[file:./$2023111910430Image/_20231122_223747_DcdY0f.png]]
+***** $\partial \mathbf{y} / \partial \mathbf{x}$
+[[file:./$2023111910430Image/_20231122_223822_ylLBh2.png]]
+[[file:./$2023111910430Image/_20231122_223912_kZm6WV.png]]
+***** TODO 矩阵求导
+
+假设$\mathbf{x}$为$n$维向量，在微分多元函数时经常使用以下规则:
+
+ 对于所有$\mathbf{A} \in \mathbb{R}^{m \times n}$，都有$\nabla_{\mathbf{x}} \mathbf{A} \mathbf{x} = \mathbf{A}^\top$
+ 对于所有$\mathbf{A} \in \mathbb{R}^{n \times m}$，都有$\nabla_{\mathbf{x}} \mathbf{x}^\top \mathbf{A}  = \mathbf{A}$
+ 对于所有$\mathbf{A} \in \mathbb{R}^{n \times n}$，都有$\nabla_{\mathbf{x}} \mathbf{x}^\top \mathbf{A} \mathbf{x}  = (\mathbf{A} + \mathbf{A}^\top)\mathbf{x}$
+ $\nabla_{\mathbf{x}} \|\mathbf{x} \|^2 = \nabla_{\mathbf{x}} \mathbf{x}^\top \mathbf{x} = 2\mathbf{x}$
+
+同样，对于任何矩阵$\mathbf{X}$，都有$\nabla_{\mathbf{X}} \|\mathbf{X} \|_F^2 = 2\mathbf{X}$。
+正如我们之后将看到的，梯度对于设计深度学习中的优化算法有很大用处。
+***** TODO 矩阵公式参考
+****** 分子布局与分母布局
+视频里采用的都是分子布局
+在套公式的时候注意布局，一般是分母布局
+“直观上讲，分子布局，就是分子是列向量形式，分母是行向量形式。分母布局则相反”。
+****** “分子布局的本质：
+分子是标量、列向量、矩阵向量化后的列向量
+分母是标量、列向量转置后的行向量、矩阵的转置矩阵、矩阵向量化后的列向量转置后的行向量。
+
+那么，第一个分子标量，分母列向量的形式。因为是分子布局，分子标量不用管，分母是列向量，根据第二句话，列向量需要转置成行向量。标量对行向量求偏导，也就是行向量。
+
+第二个分子列向量，分子标量。符合分子布局，直接求偏导，所以为列向量。
+
+第三个分子列向量，分母列向量。根据第二句话，分母应该转置成行向量。之后就根据沐神在视频里的解释，将分子的一个个元素分别对分母求偏导，得到多个行向量，而这些行向量以列向量的方式组合在一起，形成矩阵。
+
+而最后拓展到矩阵，因为是分子布局，总体来说就是对分子矩阵不变，分母矩阵转置。
+[[file:/mnt/d/BaiduSyncdisk/foam-template-master/研究生/深度学习/matrix-cook-book.pdf][matric-cook-book]]
+[[file:./mainImage/screenshot_20231124_190546.png]]
+https://zhuanlan.zhihu.com/p/629989192
+https://zhuanlan.zhihu.com/p/661750788
+https://www.zhihu.com/question/528230648
+https://www.zhihu.com/question/25399811
+https://www.zhihu.com/question/264192195
+
+https://blog.csdn.net/daaikuaichuan/article/details/80620518
+
+矩阵求导的本质与分子布局、分母布局的本质（矩阵求导——本质篇）：https://zhuanlan.zhihu.com/p/263777564
+矩阵求导公式的数学推导（矩阵求导——基础篇）：https://zhuanlan.zhihu.com/p/273729929
+矩阵求导公式的数学推导（矩阵求导——进阶篇）：https://zhuanlan.zhihu.com/p/288541909
+**** 07 [[file:/mnt/d/BaiduSyncdisk/foam-template-master/研究生/深度学习/ppt/part-0_7.pdf][链式法则]]
+:PROPERTIES:
+:NOTER_PAGE: (86 . 0.718763)
+:END:
+***** 向量链式法则
+[[file:./mainImage/screenshot_20231124_185858.png]]
+***** TODO 计算图
+[[file:./mainImage/screenshot_20231124_195453.png]]
+*** DONE 自动微分（automatic differentiation）
+CLOSED: [2023-11-22 Wed 22:32]
+:PROPERTIES:
+:NOTER_PAGE: (87 . 0.563131)
+:END:
+自动微分使系统能够随后反向传播梯度。
+这里，反向传播（backpropagate）意味着跟踪整个计算图，填充关于每个参数的偏导数。
+**** 一个简单的例子
+:PROPERTIES:
+:NOTER_PAGE: (88 . 0.092917)
+:END:
+***** 一个标量函数关于向量 x 的梯度是向量，并且与 x 具有相同的形状
+***** .grad
+#+begin_src python
+x.requires_grad_(True)  # 等价于x=torch.arange(4.0,requires_grad=True)
+x.grad  # 默认值是None
+#+end_src
+这段代码使用了 PyTorch 库来创建一个张量 x，并对其进行了一些操作。让我一步步解释：
+
+x.requires_grad_(True)：通过调用 requires_grad_方法，将张量 x 设置为需要计算梯度。这意味着当我们对 x 进行操作和计算时，PyTorch 将会自动追踪并计算其梯度。
+x = torch.arange(4.0, requires_grad=True)：这是另一种创建具有梯度追踪功能的张量 x 的方式。torch.arange 函数用于创建一个从 0 到 3 的张量，步长为 1，并将 requires_grad 参数设置为 True，表示该张量需要计算梯度。
+x.grad：这是张量 x 的 grad 属性，用于获取计算得到的梯度值。在刚创建的时候，默认情况下，x.grad 的值是 None，表示尚未进行任何计算或者还未通过反向传播计算梯度。
+
+综合起来，这段代码创建了一个需要计算梯度的张量 x，并且展示了 x.grad 属性的默认值为 None。在进行实际计算和反向传播之后，才能得到 x.grad 的具体值。
+***** tensor(28., grad_fn=<MulBackward0>)：
+这是一个 PyTorch 张量的输出。其中 28.是计算得到的结果值，
+而 grad_fn=<MulBackward0>表示该张量是通过乘法操作进行计算得到的，
+并且具有梯度函数（grad_fn）用于反向传播计算梯度
+***** 清除累计梯度
+#+begin_src python
+# 在默认情况下，PyTorch会累积梯度，我们需要清除之前的值
+x.grad.zero_()
+y = x.sum()
+y.backward()
+x.grad
+#+end_src
+**** 非标量变量的反向传播
+:PROPERTIES:
+:NOTER_PAGE: (89 . 0.270619)
+:END:
+[[file:./mainImage/screenshot_20231124_194526.png]]
+[[file:./mainImage/screenshot_20231124_194642.png]]
+[[file:./mainImage/screenshot_20231124_194737.png]]
+**** 分离计算
+:PROPERTIES:
+:NOTER_PAGE: (89 . 0.646263)
+:END:
+将某些计算移动到记录的计算图之外
+梯度不会向后流经 u 到 x
+.detach
+**** Python 控制流的梯度计算
+:PROPERTIES:
+:NOTER_PAGE: (90 . 0.428977)
+:END:
+即使构建函数的计算图需要通过 Python 控制流（例如，条件、循环或任意函数调用），我们仍然可以计算得到的变量的梯度
+*** TODO 概率
+:PROPERTIES:
+:NOTER_PAGE: (91 . 0.526641)
+:END:
+**** 基本概率论
+:PROPERTIES:
+:NOTER_PAGE: (92 . 0.681881)
+:END:
+***** 概率论公理
+:PROPERTIES:
+:NOTER_PAGE: (94 . 0.699848)
+:END:
+***** 随机变量
+:PROPERTIES:
+:NOTER_PAGE: (95 . 0.240253)
+:END:
+**** 处理多个随机变量
+:PROPERTIES:
+:NOTER_PAGE: (95 . 0.601641)
+:END:
+***** 联合概率
+:PROPERTIES:
+:NOTER_PAGE: (96 . 0.092917)
+:END:
+***** 条件概率
+:PROPERTIES:
+:NOTER_PAGE: (96 . 0.220455)
+:END:
+***** 贝叶斯定理
+:PROPERTIES:
+:NOTER_PAGE: (96 . 0.322172)
+:END:
+***** 边际化
+:PROPERTIES:
+:NOTER_PAGE: (96 . 0.523384)
+:END:
+***** 独立性
+:PROPERTIES:
+:NOTER_PAGE: (96 . 0.706364)
+:END:
+***** 应用
+:PROPERTIES:
+:NOTER_PAGE: (97 . 0.092917)
+:END:
+**** 期望和方差
+:PROPERTIES:
+:NOTER_PAGE: (98 . 0.465114)
+:END:
+*** 查阅文档
+:PROPERTIES:
+:NOTER_PAGE: (99 . 0.451351)
+:END:
+**** 查找模块中的所有函数和类
+:PROPERTIES:
+:NOTER_PAGE: (99 . 0.56952)
+:END:
+**** 查找特定函数和类的用法
+:PROPERTIES:
+:NOTER_PAGE: (100 . 0.501073)
+:END:
+** 线性神经网络
+:PROPERTIES:
+:NOTER_PAGE: (103 . 0.092917)
+:END:
+*** 线性回归
+:PROPERTIES:
+:NOTER_PAGE: (103 . 0.551187)
+:END:
+**** 线性回归的基本元素
+:PROPERTIES:
+:NOTER_PAGE: (104 . 0.092917)
+:END:
+***** 线性模型
+:PROPERTIES:
+:NOTER_PAGE: (104 . 0.37678)
+:END:
+***** 损失函数
+:PROPERTIES:
+:NOTER_PAGE: (105 . 0.297588)
+:END:
+***** 解析解
+:PROPERTIES:
+:NOTER_PAGE: (106 . 0.092917)
+:END:
+***** 随机梯度下降
+:PROPERTIES:
+:NOTER_PAGE: (106 . 0.309848)
+:END:
+***** 用模型进行预测
+:PROPERTIES:
+:NOTER_PAGE: (107 . 0.29899)
+:END:
+**** 矢量化加速
+:PROPERTIES:
+:NOTER_PAGE: (107 . 0.46428)
+:END:
+**** 正态分布与平方损失
+:PROPERTIES:
+:NOTER_PAGE: (109 . 0.261048)
+:END:
+**** 从线性回归到深度网络
+:PROPERTIES:
+:NOTER_PAGE: (110 . 0.785669)
+:END:
+***** 神经网络图
+:PROPERTIES:
+:NOTER_PAGE: (111 . 0.092917)
+:END:
+***** 生物学
+:PROPERTIES:
+:NOTER_PAGE: (111 . 0.528018)
+:END:
+*** 线性回归的从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (113 . 0.12548)
+:END:
+**** 生成数据集
+:PROPERTIES:
+:NOTER_PAGE: (113 . 0.402753)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (114 . 0.519242)
+:END:
+**** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (116 . 0.092917)
+:END:
+**** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (116 . 0.318914)
+:END:
+**** 定义损失函数
+:PROPERTIES:
+:NOTER_PAGE: (116 . 0.545202)
+:END:
+**** 定义优化算法
+:PROPERTIES:
+:NOTER_PAGE: (116 . 0.734722)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (117 . 0.239848)
+:END:
+*** 线性回归的简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (119 . 0.092917)
+:END:
+**** 生成数据集
+:PROPERTIES:
+:NOTER_PAGE: (119 . 0.25947)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (119 . 0.531414)
+:END:
+**** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (120 . 0.492942)
+:END:
+**** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (121 . 0.179104)
+:END:
+**** 定义损失函数
+:PROPERTIES:
+:NOTER_PAGE: (121 . 0.487336)
+:END:
+**** 定义优化算法
+:PROPERTIES:
+:NOTER_PAGE: (121 . 0.62125)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (122 . 0.092917)
+:END:
+*** softmax 回归
+:PROPERTIES:
+:NOTER_PAGE: (123 . 0.453258)
+:END:
+**** 分类问题
+:PROPERTIES:
+:NOTER_PAGE: (124 . 0.092917)
+:END:
+**** 网络架构
+:PROPERTIES:
+:NOTER_PAGE: (124 . 0.395859)
+:END:
+**** 全连接层的参数开销
+:PROPERTIES:
+:NOTER_PAGE: (125 . 0.092917)
+:END:
+**** softmax 运算
+:PROPERTIES:
+:NOTER_PAGE: (125 . 0.224886)
+:END:
+**** 小批量样本的矢量化
+:PROPERTIES:
+:NOTER_PAGE: (126 . 0.092917)
+:END:
+**** 损失函数
+:PROPERTIES:
+:NOTER_PAGE: (126 . 0.347361)
+:END:
+***** 对数似然
+:PROPERTIES:
+:NOTER_PAGE: (126 . 0.450606)
+:END:
+***** softmax 及其导数
+:PROPERTIES:
+:NOTER_PAGE: (127 . 0.092917)
+:END:
+***** 交叉熵损失
+:PROPERTIES:
+:NOTER_PAGE: (127 . 0.46274)
+:END:
+**** 信息论基础
+:PROPERTIES:
+:NOTER_PAGE: (127 . 0.622816)
+:END:
+***** 熵
+:PROPERTIES:
+:NOTER_PAGE: (127 . 0.707184)
+:END:
+***** 信息量
+:PROPERTIES:
+:NOTER_PAGE: (128 . 0.092917)
+:END:
+***** 重新审视交叉熵
+:PROPERTIES:
+:NOTER_PAGE: (128 . 0.307134)
+:END:
+**** 模型预测和评估
+:PROPERTIES:
+:NOTER_PAGE: (128 . 0.473927)
+:END:
+*** 图像分类数据集
+:PROPERTIES:
+:NOTER_PAGE: (129 . 0.354924)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (129 . 0.645278)
+:END:
+**** 读取小批量
+:PROPERTIES:
+:NOTER_PAGE: (131 . 0.437929)
+:END:
+**** 整合所有组件
+:PROPERTIES:
+:NOTER_PAGE: (132 . 0.092917)
+:END:
+*** softmax 回归的从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (133 . 0.246098)
+:END:
+**** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (133 . 0.513914)
+:END:
+**** 定义 softmax 操作
+:PROPERTIES:
+:NOTER_PAGE: (134 . 0.092917)
+:END:
+**** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (135 . 0.236402)
+:END:
+**** 定义损失函数
+:PROPERTIES:
+:NOTER_PAGE: (135 . 0.405467)
+:END:
+**** 分类精度
+:PROPERTIES:
+:NOTER_PAGE: (136 . 0.151174)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (137 . 0.674697)
+:END:
+**** 预测
+:PROPERTIES:
+:NOTER_PAGE: (140 . 0.40976)
+:END:
+*** softmax 回归的简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (141 . 0.470985)
+:END:
+**** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (142 . 0.092917)
+:END:
+**** 重新审视 Softmax 的实现
+:PROPERTIES:
+:NOTER_PAGE: (142 . 0.395568)
+:END:
+**** 优化算法
+:PROPERTIES:
+:NOTER_PAGE: (143 . 0.364179)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (143 . 0.516465)
+:END:
+** 多层感知机
+:PROPERTIES:
+:NOTER_PAGE: (145 . 0.092917)
+:END:
+*** 多层感知机
+:PROPERTIES:
+:NOTER_PAGE: (145 . 0.608624)
+:END:
+**** 隐藏层
+:PROPERTIES:
+:NOTER_PAGE: (146 . 0.092917)
+:END:
+***** 线性模型可能会出错
+:PROPERTIES:
+:NOTER_PAGE: (146 . 0.223371)
+:END:
+***** 在网络中加入隐藏层
+:PROPERTIES:
+:NOTER_PAGE: (146 . 0.641098)
+:END:
+***** 从线性到非线性
+:PROPERTIES:
+:NOTER_PAGE: (147 . 0.417247)
+:END:
+***** 通用近似定理
+:PROPERTIES:
+:NOTER_PAGE: (148 . 0.232134)
+:END:
+**** 激活函数
+:PROPERTIES:
+:NOTER_PAGE: (148 . 0.455593)
+:END:
+***** ReLU 函数
+:PROPERTIES:
+:NOTER_PAGE: (148 . 0.662475)
+:END:
+***** sigmoid 函数
+:PROPERTIES:
+:NOTER_PAGE: (150 . 0.092917)
+:END:
+***** tanh 函数
+:PROPERTIES:
+:NOTER_PAGE: (151 . 0.293497)
+:END:
+*** 多层感知机的从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (153 . 0.092917)
+:END:
+**** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (153 . 0.34452)
+:END:
+**** 激活函数
+:PROPERTIES:
+:NOTER_PAGE: (154 . 0.092917)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (154 . 0.248396)
+:END:
+**** 损失函数
+:PROPERTIES:
+:NOTER_PAGE: (154 . 0.455896)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (154 . 0.629053)
+:END:
+*** 多层感知机的简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (156 . 0.12548)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (156 . 0.306275)
+:END:
+*** 模型选择、欠拟合和过拟合
+:PROPERTIES:
+:NOTER_PAGE: (157 . 0.591465)
+:END:
+**** 训练误差和泛化误差
+:PROPERTIES:
+:NOTER_PAGE: (158 . 0.232033)
+:END:
+***** 统计学习理论
+:PROPERTIES:
+:NOTER_PAGE: (159 . 0.092917)
+:END:
+***** 模型复杂性
+:PROPERTIES:
+:NOTER_PAGE: (159 . 0.678283)
+:END:
+**** 模型选择
+:PROPERTIES:
+:NOTER_PAGE: (160 . 0.312639)
+:END:
+***** 验证集
+:PROPERTIES:
+:NOTER_PAGE: (160 . 0.484078)
+:END:
+***** K 折交叉验证
+:PROPERTIES:
+:NOTER_PAGE: (161 . 0.092917)
+:END:
+**** 欠拟合还是过拟合？
+:PROPERTIES:
+:NOTER_PAGE: (161 . 0.220909)
+:END:
+***** 模型复杂性
+:PROPERTIES:
+:NOTER_PAGE: (161 . 0.459015)
+:END:
+***** 数据集大小
+:PROPERTIES:
+:NOTER_PAGE: (162 . 0.337765)
+:END:
+**** 多项式回归
+:PROPERTIES:
+:NOTER_PAGE: (162 . 0.518725)
+:END:
+***** 生成数据集
+:PROPERTIES:
+:NOTER_PAGE: (162 . 0.72298)
+:END:
+***** 对模型进行训练和测试
+:PROPERTIES:
+:NOTER_PAGE: (164 . 0.092917)
+:END:
+***** 三阶多项式函数拟合(正常)
+:PROPERTIES:
+:NOTER_PAGE: (165 . 0.092917)
+:END:
+***** 线性函数拟合(欠拟合)
+:PROPERTIES:
+:NOTER_PAGE: (165 . 0.519066)
+:END:
+***** 高阶多项式函数拟合(过拟合)
+:PROPERTIES:
+:NOTER_PAGE: (166 . 0.297639)
+:END:
+*** 权重衰减
+:PROPERTIES:
+:NOTER_PAGE: (167 . 0.560038)
+:END:
+**** 高维线性回归
+:PROPERTIES:
+:NOTER_PAGE: (169 . 0.092917)
+:END:
+**** 从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (169 . 0.532551)
+:END:
+***** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (169 . 0.619508)
+:END:
+***** 定义 L2 范数惩罚
+:PROPERTIES:
+:NOTER_PAGE: (170 . 0.092917)
+:END:
+***** 定义训练代码实现
+:PROPERTIES:
+:NOTER_PAGE: (170 . 0.228119)
+:END:
+***** 忽略正则化直接训练
+:PROPERTIES:
+:NOTER_PAGE: (170 . 0.666187)
+:END:
+***** 使用权重衰减
+:PROPERTIES:
+:NOTER_PAGE: (171 . 0.293801)
+:END:
+**** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (171 . 0.696717)
+:END:
+*** 暂退法（Dropout）
+:PROPERTIES:
+:NOTER_PAGE: (174 . 0.172273)
+:END:
+**** 重新审视过拟合
+:PROPERTIES:
+:NOTER_PAGE: (174 . 0.309394)
+:END:
+**** 扰动的稳健性
+:PROPERTIES:
+:NOTER_PAGE: (175 . 0.092917)
+:END:
+**** 实践中的暂退法
+:PROPERTIES:
+:NOTER_PAGE: (175 . 0.758245)
+:END:
+**** 从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (176 . 0.399192)
+:END:
+***** 定义模型参数
+:PROPERTIES:
+:NOTER_PAGE: (177 . 0.398447)
+:END:
+***** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (177 . 0.548712)
+:END:
+***** 训练和测试
+:PROPERTIES:
+:NOTER_PAGE: (178 . 0.430934)
+:END:
+**** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (179 . 0.092917)
+:END:
+*** 前向传播、反向传播和计算图
+:PROPERTIES:
+:NOTER_PAGE: (180 . 0.599293)
+:END:
+**** 前向传播
+:PROPERTIES:
+:NOTER_PAGE: (181 . 0.092917)
+:END:
+**** 前向传播计算图
+:PROPERTIES:
+:NOTER_PAGE: (181 . 0.65827)
+:END:
+**** 反向传播
+:PROPERTIES:
+:NOTER_PAGE: (182 . 0.092917)
+:END:
+**** 训练神经网络
+:PROPERTIES:
+:NOTER_PAGE: (183 . 0.092917)
+:END:
+*** 数值稳定性和模型初始化
+:PROPERTIES:
+:NOTER_PAGE: (184 . 0.092917)
+:END:
+**** 梯度消失和梯度爆炸
+:PROPERTIES:
+:NOTER_PAGE: (184 . 0.290518)
+:END:
+***** 梯度消失
+:PROPERTIES:
+:NOTER_PAGE: (184 . 0.663144)
+:END:
+***** 梯度爆炸
+:PROPERTIES:
+:NOTER_PAGE: (185 . 0.520732)
+:END:
+***** 打破对称性
+:PROPERTIES:
+:NOTER_PAGE: (186 . 0.216338)
+:END:
+**** 参数初始化
+:PROPERTIES:
+:NOTER_PAGE: (186 . 0.502955)
+:END:
+***** 默认初始化
+:PROPERTIES:
+:NOTER_PAGE: (186 . 0.606503)
+:END:
+***** Xavier 初始化
+:PROPERTIES:
+:NOTER_PAGE: (186 . 0.708788)
+:END:
+***** 额外阅读
+:PROPERTIES:
+:NOTER_PAGE: (187 . 0.690227)
+:END:
+*** 环境和分布偏移
+:PROPERTIES:
+:NOTER_PAGE: (188 . 0.544949)
+:END:
+**** 分布偏移的类型
+:PROPERTIES:
+:NOTER_PAGE: (189 . 0.183801)
+:END:
+***** 协变量偏移
+:PROPERTIES:
+:NOTER_PAGE: (189 . 0.441818)
+:END:
+***** 标签偏移
+:PROPERTIES:
+:NOTER_PAGE: (190 . 0.386629)
+:END:
+***** 概念偏移
+:PROPERTIES:
+:NOTER_PAGE: (190 . 0.58423)
+:END:
+**** 分布偏移示例
+:PROPERTIES:
+:NOTER_PAGE: (191 . 0.455429)
+:END:
+***** 医学诊断
+:PROPERTIES:
+:NOTER_PAGE: (191 . 0.539937)
+:END:
+***** 自动驾驶汽车
+:PROPERTIES:
+:NOTER_PAGE: (192 . 0.092917)
+:END:
+***** 非平稳分布
+:PROPERTIES:
+:NOTER_PAGE: (192 . 0.326288)
+:END:
+***** 更多轶事
+:PROPERTIES:
+:NOTER_PAGE: (192 . 0.549331)
+:END:
+**** 分布偏移纠正
+:PROPERTIES:
+:NOTER_PAGE: (192 . 0.742336)
+:END:
+***** 经验风险与实际风险
+:PROPERTIES:
+:NOTER_PAGE: (193 . 0.092917)
+:END:
+***** 协变量偏移纠正
+:PROPERTIES:
+:NOTER_PAGE: (193 . 0.389293)
+:END:
+***** 标签偏移纠正
+:PROPERTIES:
+:NOTER_PAGE: (194 . 0.458447)
+:END:
+***** 概念偏移纠正
+:PROPERTIES:
+:NOTER_PAGE: (195 . 0.300884)
+:END:
+**** 学习问题的分类法
+:PROPERTIES:
+:NOTER_PAGE: (195 . 0.568611)
+:END:
+***** 批量学习
+:PROPERTIES:
+:NOTER_PAGE: (195 . 0.653119)
+:END:
+***** 在线学习
+:PROPERTIES:
+:NOTER_PAGE: (196 . 0.092917)
+:END:
+***** 老虎机
+:PROPERTIES:
+:NOTER_PAGE: (196 . 0.280354)
+:END:
+***** 控制
+:PROPERTIES:
+:NOTER_PAGE: (196 . 0.417753)
+:END:
+***** 强化学习
+:PROPERTIES:
+:NOTER_PAGE: (196 . 0.597449)
+:END:
+***** 考虑到环境
+:PROPERTIES:
+:NOTER_PAGE: (196 . 0.717576)
+:END:
+**** 机器学习中的公平、责任和透明度
+:PROPERTIES:
+:NOTER_PAGE: (197 . 0.092917)
+:END:
+*** 实战 Kaggle 比赛：预测房价
+:PROPERTIES:
+:NOTER_PAGE: (198 . 0.27327)
+:END:
+**** 下载和缓存数据集
+:PROPERTIES:
+:NOTER_PAGE: (198 . 0.495455)
+:END:
+**** Kaggle
+:PROPERTIES:
+:NOTER_PAGE: (200 . 0.092917)
+:END:
+**** 访问和读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (201 . 0.092917)
+:END:
+**** 数据预处理
+:PROPERTIES:
+:NOTER_PAGE: (202 . 0.53197)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (203 . 0.506604)
+:END:
+**** K 折交叉验证
+:PROPERTIES:
+:NOTER_PAGE: (204 . 0.729318)
+:END:
+**** 模型选择
+:PROPERTIES:
+:NOTER_PAGE: (205 . 0.741364)
+:END:
+**** 提交 Kaggle 预测
+:PROPERTIES:
+:NOTER_PAGE: (206 . 0.641578)
+:END:
+** 深度学习计算
+:PROPERTIES:
+:NOTER_PAGE: (209 . 0.092917)
+:END:
+*** 层和块
+:PROPERTIES:
+:NOTER_PAGE: (209 . 0.696098)
+:END:
+**** 自定义块
+:PROPERTIES:
+:NOTER_PAGE: (211 . 0.31327)
+:END:
+**** 顺序块
+:PROPERTIES:
+:NOTER_PAGE: (212 . 0.515846)
+:END:
+**** 在前向传播函数中执行代码
+:PROPERTIES:
+:NOTER_PAGE: (213 . 0.529962)
+:END:
+**** 效率
+:PROPERTIES:
+:NOTER_PAGE: (215 . 0.092917)
+:END:
+*** 参数管理
+:PROPERTIES:
+:NOTER_PAGE: (215 . 0.575101)
+:END:
+**** 参数访问
+:PROPERTIES:
+:NOTER_PAGE: (216 . 0.30851)
+:END:
+***** 目标参数
+:PROPERTIES:
+:NOTER_PAGE: (216 . 0.598157)
+:END:
+***** 一次性访问所有参数
+:PROPERTIES:
+:NOTER_PAGE: (217 . 0.242942)
+:END:
+***** 从嵌套块收集参数
+:PROPERTIES:
+:NOTER_PAGE: (217 . 0.643611)
+:END:
+**** 参数初始化
+:PROPERTIES:
+:NOTER_PAGE: (219 . 0.309242)
+:END:
+***** 内置初始化
+:PROPERTIES:
+:NOTER_PAGE: (219 . 0.482917)
+:END:
+***** 自定义初始化
+:PROPERTIES:
+:NOTER_PAGE: (220 . 0.57303)
+:END:
+**** 参数绑定
+:PROPERTIES:
+:NOTER_PAGE: (221 . 0.497639)
+:END:
+*** 延后初始化
+:PROPERTIES:
+:NOTER_PAGE: (222 . 0.469583)
+:END:
+**** 实例化网络
+:PROPERTIES:
+:NOTER_PAGE: (223 . 0.092917)
+:END:
+*** 自定义层
+:PROPERTIES:
+:NOTER_PAGE: (223 . 0.582652)
+:END:
+**** 不带参数的层
+:PROPERTIES:
+:NOTER_PAGE: (224 . 0.092917)
+:END:
+**** 带参数的层
+:PROPERTIES:
+:NOTER_PAGE: (225 . 0.092917)
+:END:
+*** 读写文件
+:PROPERTIES:
+:NOTER_PAGE: (226 . 0.468043)
+:END:
+**** 加载和保存张量
+:PROPERTIES:
+:NOTER_PAGE: (226 . 0.624785)
+:END:
+**** 加载和保存模型参数
+:PROPERTIES:
+:NOTER_PAGE: (227 . 0.579811)
+:END:
+*** GPU
+:PROPERTIES:
+:NOTER_PAGE: (229 . 0.26572)
+:END:
+**** 计算设备
+:PROPERTIES:
+:NOTER_PAGE: (230 . 0.531881)
+:END:
+**** 张量与 GPU
+:PROPERTIES:
+:NOTER_PAGE: (231 . 0.579672)
+:END:
+***** 存储在 GPU 上
+:PROPERTIES:
+:NOTER_PAGE: (232 . 0.092917)
+:END:
+***** 复制
+:PROPERTIES:
+:NOTER_PAGE: (232 . 0.499255)
+:END:
+***** 旁注
+:PROPERTIES:
+:NOTER_PAGE: (233 . 0.497159)
+:END:
+**** 神经网络与 GPU
+:PROPERTIES:
+:NOTER_PAGE: (233 . 0.726414)
+:END:
+** 卷积神经网络
+:PROPERTIES:
+:NOTER_PAGE: (235 . 0.092917)
+:END:
+*** 从全连接层到卷积
+:PROPERTIES:
+:NOTER_PAGE: (236 . 0.092917)
+:END:
+**** 不变性
+:PROPERTIES:
+:NOTER_PAGE: (236 . 0.40553)
+:END:
+**** 多层感知机的限制
+:PROPERTIES:
+:NOTER_PAGE: (237 . 0.593081)
+:END:
+***** 平移不变性
+:PROPERTIES:
+:NOTER_PAGE: (238 . 0.092917)
+:END:
+***** 局部性
+:PROPERTIES:
+:NOTER_PAGE: (238 . 0.288207)
+:END:
+**** 卷积
+:PROPERTIES:
+:NOTER_PAGE: (238 . 0.639987)
+:END:
+**** “沃尔多在哪里”回顾
+:PROPERTIES:
+:NOTER_PAGE: (239 . 0.165606)
+:END:
+***** 通道
+:PROPERTIES:
+:NOTER_PAGE: (239 . 0.550492)
+:END:
+*** 图像卷积
+:PROPERTIES:
+:NOTER_PAGE: (240 . 0.625051)
+:END:
+**** 互相关运算
+:PROPERTIES:
+:NOTER_PAGE: (241 . 0.092917)
+:END:
+**** 卷积层
+:PROPERTIES:
+:NOTER_PAGE: (242 . 0.41428)
+:END:
+**** 图像中目标的边缘检测
+:PROPERTIES:
+:NOTER_PAGE: (243 . 0.092917)
+:END:
+**** 学习卷积核
+:PROPERTIES:
+:NOTER_PAGE: (244 . 0.252311)
+:END:
+**** 互相关和卷积
+:PROPERTIES:
+:NOTER_PAGE: (245 . 0.230215)
+:END:
+**** 特征映射和感受野
+:PROPERTIES:
+:NOTER_PAGE: (245 . 0.506427)
+:END:
+*** 填充和步幅
+:PROPERTIES:
+:NOTER_PAGE: (246 . 0.481679)
+:END:
+**** 填充
+:PROPERTIES:
+:NOTER_PAGE: (246 . 0.72447)
+:END:
+**** 步幅
+:PROPERTIES:
+:NOTER_PAGE: (248 . 0.393561)
+:END:
+*** 多输入多输出通道
+:PROPERTIES:
+:NOTER_PAGE: (250 . 0.092917)
+:END:
+**** 多输入通道
+:PROPERTIES:
+:NOTER_PAGE: (250 . 0.279331)
+:END:
+**** 多输出通道
+:PROPERTIES:
+:NOTER_PAGE: (251 . 0.403081)
+:END:
+**** 11 卷积层
+:PROPERTIES:
+:NOTER_PAGE: (252 . 0.366629)
+:END:
+*** 汇聚层
+:PROPERTIES:
+:NOTER_PAGE: (254 . 0.206995)
+:END:
+**** 最大汇聚层和平均汇聚层
+:PROPERTIES:
+:NOTER_PAGE: (254 . 0.541932)
+:END:
+**** 填充和步幅
+:PROPERTIES:
+:NOTER_PAGE: (256 . 0.21697)
+:END:
+**** 多个通道
+:PROPERTIES:
+:NOTER_PAGE: (257 . 0.169154)
+:END:
+*** 卷积神经网络（LeNet）
+:PROPERTIES:
+:NOTER_PAGE: (258 . 0.560038)
+:END:
+**** LeNet
+:PROPERTIES:
+:NOTER_PAGE: (259 . 0.092917)
+:END:
+**** 模型训练
+:PROPERTIES:
+:NOTER_PAGE: (261 . 0.341023)
+:END:
+** 现代卷积神经网络
+:PROPERTIES:
+:NOTER_PAGE: (265 . 0.092917)
+:END:
+*** 深度卷积神经网络（AlexNet）
+:PROPERTIES:
+:NOTER_PAGE: (266 . 0.092917)
+:END:
+**** 学习表征
+:PROPERTIES:
+:NOTER_PAGE: (266 . 0.686301)
+:END:
+***** 缺少的成分：数据
+:PROPERTIES:
+:NOTER_PAGE: (267 . 0.619912)
+:END:
+***** 缺少的成分：硬件
+:PROPERTIES:
+:NOTER_PAGE: (268 . 0.092917)
+:END:
+**** AlexNet
+:PROPERTIES:
+:NOTER_PAGE: (268 . 0.664331)
+:END:
+***** 模型设计
+:PROPERTIES:
+:NOTER_PAGE: (269 . 0.665833)
+:END:
+***** 激活函数
+:PROPERTIES:
+:NOTER_PAGE: (270 . 0.092917)
+:END:
+***** 容量控制和预处理
+:PROPERTIES:
+:NOTER_PAGE: (270 . 0.242222)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (271 . 0.637702)
+:END:
+**** 训练 AlexNet
+:PROPERTIES:
+:NOTER_PAGE: (272 . 0.092917)
+:END:
+*** 使用块的网络（VGG）
+:PROPERTIES:
+:NOTER_PAGE: (273 . 0.234154)
+:END:
+**** VGG 块
+:PROPERTIES:
+:NOTER_PAGE: (273 . 0.44524)
+:END:
+**** VGG 网络
+:PROPERTIES:
+:NOTER_PAGE: (274 . 0.287033)
+:END:
+**** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (276 . 0.125265)
+:END:
+*** 网络中的网络（NiN）
+:PROPERTIES:
+:NOTER_PAGE: (277 . 0.27327)
+:END:
+**** NiN 块
+:PROPERTIES:
+:NOTER_PAGE: (277 . 0.449987)
+:END:
+**** NiN 模型
+:PROPERTIES:
+:NOTER_PAGE: (279 . 0.092917)
+:END:
+**** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (280 . 0.092917)
+:END:
+*** 含并行连结的网络（GoogLeNet）
+:PROPERTIES:
+:NOTER_PAGE: (281 . 0.206831)
+:END:
+**** Inception 块
+:PROPERTIES:
+:NOTER_PAGE: (281 . 0.383043)
+:END:
+**** GoogLeNet 模型
+:PROPERTIES:
+:NOTER_PAGE: (282 . 0.642311)
+:END:
+**** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (285 . 0.180354)
+:END:
+*** 批量规范化
+:PROPERTIES:
+:NOTER_PAGE: (286 . 0.374407)
+:END:
+**** 训练深层网络
+:PROPERTIES:
+:NOTER_PAGE: (286 . 0.511528)
+:END:
+**** 批量规范化层
+:PROPERTIES:
+:NOTER_PAGE: (287 . 0.726288)
+:END:
+***** 全连接层
+:PROPERTIES:
+:NOTER_PAGE: (288 . 0.092917)
+:END:
+***** 卷积层
+:PROPERTIES:
+:NOTER_PAGE: (288 . 0.26947)
+:END:
+***** 预测过程中的批量规范化
+:PROPERTIES:
+:NOTER_PAGE: (288 . 0.447285)
+:END:
+**** 从零实现
+:PROPERTIES:
+:NOTER_PAGE: (288 . 0.607008)
+:END:
+**** 使用批量规范化层的 LeNet
+:PROPERTIES:
+:NOTER_PAGE: (290 . 0.340997)
+:END:
+**** 简明实现
+:PROPERTIES:
+:NOTER_PAGE: (291 . 0.487058)
+:END:
+**** 争议
+:PROPERTIES:
+:NOTER_PAGE: (292 . 0.293801)
+:END:
+*** 残差网络（ResNet）
+:PROPERTIES:
+:NOTER_PAGE: (293 . 0.614381)
+:END:
+**** 函数类
+:PROPERTIES:
+:NOTER_PAGE: (294 . 0.092917)
+:END:
+**** 残差块
+:PROPERTIES:
+:NOTER_PAGE: (295 . 0.092917)
+:END:
+**** ResNet 模型
+:PROPERTIES:
+:NOTER_PAGE: (297 . 0.375013)
+:END:
+**** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (300 . 0.234318)
+:END:
+*** 稠密连接网络（DenseNet）
+:PROPERTIES:
+:NOTER_PAGE: (301 . 0.338687)
+:END:
+**** 从 ResNet 到 DenseNet
+:PROPERTIES:
+:NOTER_PAGE: (301 . 0.453763)
+:END:
+**** 稠密块体
+:PROPERTIES:
+:NOTER_PAGE: (302 . 0.36654)
+:END:
+**** 过渡层
+:PROPERTIES:
+:NOTER_PAGE: (303 . 0.453535)
+:END:
+**** DenseNet 模型
+:PROPERTIES:
+:NOTER_PAGE: (304 . 0.151174)
+:END:
+**** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (305 . 0.092917)
+:END:
+** 循环神经网络
+:PROPERTIES:
+:NOTER_PAGE: (307 . 0.092917)
+:END:
+*** 序列模型
+:PROPERTIES:
+:NOTER_PAGE: (308 . 0.092917)
+:END:
+**** 统计工具
+:PROPERTIES:
+:NOTER_PAGE: (308 . 0.728561)
+:END:
+***** 自回归模型
+:PROPERTIES:
+:NOTER_PAGE: (309 . 0.468258)
+:END:
+***** 马尔可夫模型
+:PROPERTIES:
+:NOTER_PAGE: (310 . 0.304078)
+:END:
+***** 因果关系
+:PROPERTIES:
+:NOTER_PAGE: (310 . 0.706793)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (311 . 0.16471)
+:END:
+**** 预测
+:PROPERTIES:
+:NOTER_PAGE: (313 . 0.215354)
+:END:
+*** 文本预处理
+:PROPERTIES:
+:NOTER_PAGE: (316 . 0.401578)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (317 . 0.092917)
+:END:
+**** 词元化
+:PROPERTIES:
+:NOTER_PAGE: (317 . 0.590139)
+:END:
+**** 词表
+:PROPERTIES:
+:NOTER_PAGE: (318 . 0.445631)
+:END:
+**** 整合所有功能
+:PROPERTIES:
+:NOTER_PAGE: (320 . 0.386351)
+:END:
+*** 语言模型和数据集
+:PROPERTIES:
+:NOTER_PAGE: (321 . 0.350227)
+:END:
+**** 学习语言模型
+:PROPERTIES:
+:NOTER_PAGE: (321 . 0.720051)
+:END:
+**** 马尔可夫模型与 n 元语法
+:PROPERTIES:
+:NOTER_PAGE: (323 . 0.092917)
+:END:
+**** 自然语言统计
+:PROPERTIES:
+:NOTER_PAGE: (323 . 0.350391)
+:END:
+**** 读取长序列数据
+:PROPERTIES:
+:NOTER_PAGE: (326 . 0.265316)
+:END:
+***** 随机采样
+:PROPERTIES:
+:NOTER_PAGE: (327 . 0.092917)
+:END:
+***** 顺序分区
+:PROPERTIES:
+:NOTER_PAGE: (328 . 0.305366)
+:END:
+*** 循环神经网络
+:PROPERTIES:
+:NOTER_PAGE: (330 . 0.473207)
+:END:
+**** 无隐状态的神经网络
+:PROPERTIES:
+:NOTER_PAGE: (331 . 0.092917)
+:END:
+**** 有隐状态的循环神经网络
+:PROPERTIES:
+:NOTER_PAGE: (331 . 0.400657)
+:END:
+**** 基于循环神经网络的字符级语言模型
+:PROPERTIES:
+:NOTER_PAGE: (333 . 0.162374)
+:END:
+**** 困惑度（Perplexity）
+:PROPERTIES:
+:NOTER_PAGE: (333 . 0.697879)
+:END:
+*** 循环神经网络的从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (335 . 0.27327)
+:END:
+**** 独热编码
+:PROPERTIES:
+:NOTER_PAGE: (335 . 0.595051)
+:END:
+**** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (336 . 0.409242)
+:END:
+**** 循环神经网络模型
+:PROPERTIES:
+:NOTER_PAGE: (337 . 0.092917)
+:END:
+**** 预测
+:PROPERTIES:
+:NOTER_PAGE: (338 . 0.338422)
+:END:
+**** 梯度裁剪
+:PROPERTIES:
+:NOTER_PAGE: (339 . 0.092917)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (340 . 0.092917)
+:END:
+*** 循环神经网络的简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (343 . 0.703447)
+:END:
+**** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (344 . 0.256932)
+:END:
+**** 训练与预测
+:PROPERTIES:
+:NOTER_PAGE: (346 . 0.092917)
+:END:
+*** 通过时间反向传播
+:PROPERTIES:
+:NOTER_PAGE: (347 . 0.384937)
+:END:
+**** 循环神经网络的梯度分析
+:PROPERTIES:
+:NOTER_PAGE: (348 . 0.092917)
+:END:
+***** 完全计算
+:PROPERTIES:
+:NOTER_PAGE: (349 . 0.248788)
+:END:
+***** 截断时间步
+:PROPERTIES:
+:NOTER_PAGE: (349 . 0.408535)
+:END:
+***** 随机截断
+:PROPERTIES:
+:NOTER_PAGE: (349 . 0.550063)
+:END:
+***** 比较策略
+:PROPERTIES:
+:NOTER_PAGE: (350 . 0.092917)
+:END:
+**** 通过时间反向传播的细节
+:PROPERTIES:
+:NOTER_PAGE: (350 . 0.504293)
+:END:
+** 现代循环神经网络
+:PROPERTIES:
+:NOTER_PAGE: (353 . 0.092917)
+:END:
+*** 门控循环单元（GRU）
+:PROPERTIES:
+:NOTER_PAGE: (353 . 0.703649)
+:END:
+**** 门控隐状态
+:PROPERTIES:
+:NOTER_PAGE: (354 . 0.298447)
+:END:
+***** 重置门和更新门
+:PROPERTIES:
+:NOTER_PAGE: (354 . 0.441818)
+:END:
+***** 候选隐状态
+:PROPERTIES:
+:NOTER_PAGE: (355 . 0.249558)
+:END:
+***** 隐状态
+:PROPERTIES:
+:NOTER_PAGE: (356 . 0.092917)
+:END:
+**** 从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (356 . 0.733346)
+:END:
+***** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (357 . 0.179104)
+:END:
+***** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (357 . 0.726742)
+:END:
+***** 训练与预测
+:PROPERTIES:
+:NOTER_PAGE: (358 . 0.390808)
+:END:
+**** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (359 . 0.092917)
+:END:
+*** 长短期记忆网络（LSTM）
+:PROPERTIES:
+:NOTER_PAGE: (360 . 0.292891)
+:END:
+**** 门控记忆元
+:PROPERTIES:
+:NOTER_PAGE: (360 . 0.448194)
+:END:
+***** 输入门、忘记门和输出门
+:PROPERTIES:
+:NOTER_PAGE: (360 . 0.650442)
+:END:
+***** 候选记忆元
+:PROPERTIES:
+:NOTER_PAGE: (361 . 0.552058)
+:END:
+***** 记忆元
+:PROPERTIES:
+:NOTER_PAGE: (362 . 0.35971)
+:END:
+***** 隐状态
+:PROPERTIES:
+:NOTER_PAGE: (363 . 0.092917)
+:END:
+**** 从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (363 . 0.563611)
+:END:
+***** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (364 . 0.092917)
+:END:
+***** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (364 . 0.643485)
+:END:
+***** 训练和预测
+:PROPERTIES:
+:NOTER_PAGE: (365 . 0.401742)
+:END:
+**** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (366 . 0.092917)
+:END:
+*** 深度循环神经网络
+:PROPERTIES:
+:NOTER_PAGE: (367 . 0.339684)
+:END:
+**** 函数依赖关系
+:PROPERTIES:
+:NOTER_PAGE: (368 . 0.092917)
+:END:
+**** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (368 . 0.463422)
+:END:
+**** 训练与预测
+:PROPERTIES:
+:NOTER_PAGE: (369 . 0.092917)
+:END:
+*** 双向循环神经网络
+:PROPERTIES:
+:NOTER_PAGE: (370 . 0.092917)
+:END:
+**** 隐马尔可夫模型中的动态规划
+:PROPERTIES:
+:NOTER_PAGE: (370 . 0.399583)
+:END:
+**** 双向模型
+:PROPERTIES:
+:NOTER_PAGE: (372 . 0.369684)
+:END:
+***** 定义
+:PROPERTIES:
+:NOTER_PAGE: (373 . 0.092917)
+:END:
+***** 模型的计算代价及其应用
+:PROPERTIES:
+:NOTER_PAGE: (373 . 0.506679)
+:END:
+**** 双向循环神经网络的错误应用
+:PROPERTIES:
+:NOTER_PAGE: (374 . 0.092917)
+:END:
+*** 机器翻译与数据集
+:PROPERTIES:
+:NOTER_PAGE: (375 . 0.470985)
+:END:
+**** 下载和预处理数据集
+:PROPERTIES:
+:NOTER_PAGE: (376 . 0.185884)
+:END:
+**** 词元化
+:PROPERTIES:
+:NOTER_PAGE: (377 . 0.533662)
+:END:
+**** 词表
+:PROPERTIES:
+:NOTER_PAGE: (379 . 0.293801)
+:END:
+**** 加载数据集
+:PROPERTIES:
+:NOTER_PAGE: (379 . 0.592854)
+:END:
+**** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (380 . 0.581086)
+:END:
+*** 编码器-解码器架构
+:PROPERTIES:
+:NOTER_PAGE: (382 . 0.092917)
+:END:
+**** 编码器
+:PROPERTIES:
+:NOTER_PAGE: (382 . 0.479015)
+:END:
+**** 解码器
+:PROPERTIES:
+:NOTER_PAGE: (383 . 0.092917)
+:END:
+**** 合并编码器和解码器
+:PROPERTIES:
+:NOTER_PAGE: (383 . 0.451174)
+:END:
+*** 序列到序列学习（seq2seq）
+:PROPERTIES:
+:NOTER_PAGE: (384 . 0.39702)
+:END:
+**** 编码器
+:PROPERTIES:
+:NOTER_PAGE: (385 . 0.311679)
+:END:
+**** 解码器
+:PROPERTIES:
+:NOTER_PAGE: (387 . 0.092917)
+:END:
+**** 损失函数
+:PROPERTIES:
+:NOTER_PAGE: (388 . 0.532879)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (390 . 0.236553)
+:END:
+**** 预测
+:PROPERTIES:
+:NOTER_PAGE: (392 . 0.092917)
+:END:
+**** 预测序列的评估
+:PROPERTIES:
+:NOTER_PAGE: (393 . 0.232967)
+:END:
+*** 束搜索
+:PROPERTIES:
+:NOTER_PAGE: (395 . 0.12548)
+:END:
+**** 贪心搜索
+:PROPERTIES:
+:NOTER_PAGE: (395 . 0.368258)
+:END:
+**** 穷举搜索
+:PROPERTIES:
+:NOTER_PAGE: (396 . 0.414533)
+:END:
+**** 束搜索
+:PROPERTIES:
+:NOTER_PAGE: (396 . 0.60471)
+:END:
+** 注意力机制
+:PROPERTIES:
+:NOTER_PAGE: (399 . 0.092917)
+:END:
+*** 注意力提示
+:PROPERTIES:
+:NOTER_PAGE: (400 . 0.092917)
+:END:
+**** 生物学中的注意力提示
+:PROPERTIES:
+:NOTER_PAGE: (400 . 0.385909)
+:END:
+**** 查询、键和值
+:PROPERTIES:
+:NOTER_PAGE: (401 . 0.495189)
+:END:
+**** 注意力的可视化
+:PROPERTIES:
+:NOTER_PAGE: (402 . 0.440492)
+:END:
+*** 注意力汇聚：Nadaraya-Watson 核回归
+:PROPERTIES:
+:NOTER_PAGE: (404 . 0.238548)
+:END:
+**** 生成数据集
+:PROPERTIES:
+:NOTER_PAGE: (404 . 0.47822)
+:END:
+**** 平均汇聚
+:PROPERTIES:
+:NOTER_PAGE: (405 . 0.397929)
+:END:
+**** 非参数注意力汇聚
+:PROPERTIES:
+:NOTER_PAGE: (406 . 0.092917)
+:END:
+**** 带参数注意力汇聚
+:PROPERTIES:
+:NOTER_PAGE: (407 . 0.621907)
+:END:
+***** 批量矩阵乘法
+:PROPERTIES:
+:NOTER_PAGE: (408 . 0.092917)
+:END:
+***** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (408 . 0.562399)
+:END:
+***** 训练
+:PROPERTIES:
+:NOTER_PAGE: (409 . 0.092917)
+:END:
+*** 注意力评分函数
+:PROPERTIES:
+:NOTER_PAGE: (411 . 0.451351)
+:END:
+**** 掩蔽 softmax 操作
+:PROPERTIES:
+:NOTER_PAGE: (412 . 0.435379)
+:END:
+**** 加性注意力
+:PROPERTIES:
+:NOTER_PAGE: (413 . 0.511919)
+:END:
+**** 缩放点积注意力
+:PROPERTIES:
+:NOTER_PAGE: (415 . 0.214167)
+:END:
+*** Bahdanau 注意力
+:PROPERTIES:
+:NOTER_PAGE: (417 . 0.092917)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (417 . 0.357588)
+:END:
+**** 定义注意力解码器
+:PROPERTIES:
+:NOTER_PAGE: (418 . 0.092917)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (420 . 0.150694)
+:END:
+*** 多头注意力
+:PROPERTIES:
+:NOTER_PAGE: (422 . 0.218927)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (422 . 0.680783)
+:END:
+**** 实现
+:PROPERTIES:
+:NOTER_PAGE: (423 . 0.332475)
+:END:
+*** 自注意力和位置编码
+:PROPERTIES:
+:NOTER_PAGE: (426 . 0.092917)
+:END:
+**** 自注意力
+:PROPERTIES:
+:NOTER_PAGE: (426 . 0.373611)
+:END:
+**** 比较卷积神经网络、循环神经网络和自注意力
+:PROPERTIES:
+:NOTER_PAGE: (427 . 0.236553)
+:END:
+**** 位置编码
+:PROPERTIES:
+:NOTER_PAGE: (428 . 0.192778)
+:END:
+***** 绝对位置信息
+:PROPERTIES:
+:NOTER_PAGE: (429 . 0.456679)
+:END:
+***** 相对位置信息
+:PROPERTIES:
+:NOTER_PAGE: (430 . 0.469091)
+:END:
+*** Transformer
+:PROPERTIES:
+:NOTER_PAGE: (431 . 0.377386)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (431 . 0.573384)
+:END:
+**** 基于位置的前馈网络
+:PROPERTIES:
+:NOTER_PAGE: (433 . 0.416061)
+:END:
+**** 残差连接和层规范化
+:PROPERTIES:
+:NOTER_PAGE: (434 . 0.265745)
+:END:
+**** 编码器
+:PROPERTIES:
+:NOTER_PAGE: (435 . 0.259962)
+:END:
+**** 解码器
+:PROPERTIES:
+:NOTER_PAGE: (437 . 0.151174)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (439 . 0.646793)
+:END:
+** 优化算法
+:PROPERTIES:
+:NOTER_PAGE: (445 . 0.092917)
+:END:
+*** 优化和深度学习
+:PROPERTIES:
+:NOTER_PAGE: (445 . 0.66351)
+:END:
+**** 优化的目标
+:PROPERTIES:
+:NOTER_PAGE: (446 . 0.092917)
+:END:
+**** 深度学习中的优化挑战
+:PROPERTIES:
+:NOTER_PAGE: (447 . 0.292967)
+:END:
+***** 局部最小值
+:PROPERTIES:
+:NOTER_PAGE: (447 . 0.444621)
+:END:
+***** 鞍点
+:PROPERTIES:
+:NOTER_PAGE: (448 . 0.185227)
+:END:
+***** 梯度消失
+:PROPERTIES:
+:NOTER_PAGE: (449 . 0.494634)
+:END:
+*** 凸性
+:PROPERTIES:
+:NOTER_PAGE: (451 . 0.092917)
+:END:
+**** 定义
+:PROPERTIES:
+:NOTER_PAGE: (451 . 0.352348)
+:END:
+***** 凸集
+:PROPERTIES:
+:NOTER_PAGE: (451 . 0.439318)
+:END:
+***** 凸函数
+:PROPERTIES:
+:NOTER_PAGE: (452 . 0.608952)
+:END:
+***** 詹森不等式
+:PROPERTIES:
+:NOTER_PAGE: (453 . 0.492588)
+:END:
+**** 性质
+:PROPERTIES:
+:NOTER_PAGE: (454 . 0.092917)
+:END:
+***** 局部极小值是全局极小值
+:PROPERTIES:
+:NOTER_PAGE: (454 . 0.164192)
+:END:
+***** 凸函数的下水平集是凸的
+:PROPERTIES:
+:NOTER_PAGE: (455 . 0.092917)
+:END:
+***** 凸性和二阶导数
+:PROPERTIES:
+:NOTER_PAGE: (455 . 0.331477)
+:END:
+**** 约束
+:PROPERTIES:
+:NOTER_PAGE: (456 . 0.479331)
+:END:
+***** 拉格朗日函数
+:PROPERTIES:
+:NOTER_PAGE: (456 . 0.709205)
+:END:
+***** 惩罚
+:PROPERTIES:
+:NOTER_PAGE: (457 . 0.203889)
+:END:
+***** 投影
+:PROPERTIES:
+:NOTER_PAGE: (457 . 0.418927)
+:END:
+*** 梯度下降
+:PROPERTIES:
+:NOTER_PAGE: (458 . 0.726187)
+:END:
+**** 一维梯度下降
+:PROPERTIES:
+:NOTER_PAGE: (459 . 0.092917)
+:END:
+***** 学习率
+:PROPERTIES:
+:NOTER_PAGE: (460 . 0.739028)
+:END:
+***** 局部最小值
+:PROPERTIES:
+:NOTER_PAGE: (461 . 0.731869)
+:END:
+**** 多元梯度下降
+:PROPERTIES:
+:NOTER_PAGE: (462 . 0.517487)
+:END:
+**** 自适应方法
+:PROPERTIES:
+:NOTER_PAGE: (464 . 0.293801)
+:END:
+***** 牛顿法
+:PROPERTIES:
+:NOTER_PAGE: (464 . 0.459255)
+:END:
+***** 收敛性分析
+:PROPERTIES:
+:NOTER_PAGE: (467 . 0.293801)
+:END:
+***** 预处理
+:PROPERTIES:
+:NOTER_PAGE: (467 . 0.787273)
+:END:
+***** 梯度下降和线搜索
+:PROPERTIES:
+:NOTER_PAGE: (468 . 0.185227)
+:END:
+*** 随机梯度下降
+:PROPERTIES:
+:NOTER_PAGE: (469 . 0.12548)
+:END:
+**** 随机梯度更新
+:PROPERTIES:
+:NOTER_PAGE: (469 . 0.36351)
+:END:
+**** 动态学习率
+:PROPERTIES:
+:NOTER_PAGE: (471 . 0.126364)
+:END:
+**** 凸目标的收敛性分析
+:PROPERTIES:
+:NOTER_PAGE: (472 . 0.708131)
+:END:
+**** 随机梯度和有限样本
+:PROPERTIES:
+:NOTER_PAGE: (474 . 0.266742)
+:END:
+*** 小批量随机梯度下降
+:PROPERTIES:
+:NOTER_PAGE: (475 . 0.378927)
+:END:
+**** 向量化和缓存
+:PROPERTIES:
+:NOTER_PAGE: (475 . 0.536212)
+:END:
+**** 小批量
+:PROPERTIES:
+:NOTER_PAGE: (477 . 0.543056)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (478 . 0.384785)
+:END:
+**** 从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (479 . 0.092917)
+:END:
+**** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (482 . 0.420694)
+:END:
+*** 动量法
+:PROPERTIES:
+:NOTER_PAGE: (484 . 0.265694)
+:END:
+**** 基础
+:PROPERTIES:
+:NOTER_PAGE: (484 . 0.402803)
+:END:
+***** 泄漏平均值
+:PROPERTIES:
+:NOTER_PAGE: (484 . 0.487273)
+:END:
+***** 条件不佳的问题
+:PROPERTIES:
+:NOTER_PAGE: (485 . 0.271629)
+:END:
+***** 动量法
+:PROPERTIES:
+:NOTER_PAGE: (486 . 0.711843)
+:END:
+***** 有效样本权重
+:PROPERTIES:
+:NOTER_PAGE: (488 . 0.359293)
+:END:
+**** 实际实验
+:PROPERTIES:
+:NOTER_PAGE: (489 . 0.092917)
+:END:
+***** 从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (489 . 0.165467)
+:END:
+***** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (491 . 0.297639)
+:END:
+**** 理论分析
+:PROPERTIES:
+:NOTER_PAGE: (492 . 0.092917)
+:END:
+***** 二次凸函数
+:PROPERTIES:
+:NOTER_PAGE: (492 . 0.183245)
+:END:
+***** 标量函数
+:PROPERTIES:
+:NOTER_PAGE: (492 . 0.746793)
+:END:
+*** AdaGrad 算法
+:PROPERTIES:
+:NOTER_PAGE: (494 . 0.385076)
+:END:
+**** 稀疏特征和学习率
+:PROPERTIES:
+:NOTER_PAGE: (494 . 0.481515)
+:END:
+**** 预处理
+:PROPERTIES:
+:NOTER_PAGE: (495 . 0.092917)
+:END:
+**** 算法
+:PROPERTIES:
+:NOTER_PAGE: (496 . 0.092917)
+:END:
+**** 从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (497 . 0.728801)
+:END:
+**** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (498 . 0.652929)
+:END:
+*** RMSProp 算法
+:PROPERTIES:
+:NOTER_PAGE: (500 . 0.092917)
+:END:
+**** 算法
+:PROPERTIES:
+:NOTER_PAGE: (500 . 0.349798)
+:END:
+**** 从零开始实现
+:PROPERTIES:
+:NOTER_PAGE: (501 . 0.293283)
+:END:
+**** 简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (503 . 0.092917)
+:END:
+*** Adadelta
+:PROPERTIES:
+:NOTER_PAGE: (504 . 0.092917)
+:END:
+**** Adadelta 算法
+:PROPERTIES:
+:NOTER_PAGE: (504 . 0.213737)
+:END:
+**** 代码实现
+:PROPERTIES:
+:NOTER_PAGE: (504 . 0.678876)
+:END:
+*** Adam 算法
+:PROPERTIES:
+:NOTER_PAGE: (506 . 0.631237)
+:END:
+**** 算法
+:PROPERTIES:
+:NOTER_PAGE: (507 . 0.18577)
+:END:
+**** 实现
+:PROPERTIES:
+:NOTER_PAGE: (507 . 0.74947)
+:END:
+**** Yogi
+:PROPERTIES:
+:NOTER_PAGE: (509 . 0.419823)
+:END:
+*** 学习率调度器
+:PROPERTIES:
+:NOTER_PAGE: (511 . 0.092917)
+:END:
+**** 一个简单的问题
+:PROPERTIES:
+:NOTER_PAGE: (511 . 0.487588)
+:END:
+**** 学习率调度器
+:PROPERTIES:
+:NOTER_PAGE: (513 . 0.704697)
+:END:
+**** 策略
+:PROPERTIES:
+:NOTER_PAGE: (515 . 0.377778)
+:END:
+***** 单因子调度器
+:PROPERTIES:
+:NOTER_PAGE: (515 . 0.500543)
+:END:
+***** 多因子调度器
+:PROPERTIES:
+:NOTER_PAGE: (516 . 0.32471)
+:END:
+***** 余弦调度器
+:PROPERTIES:
+:NOTER_PAGE: (517 . 0.460429)
+:END:
+***** 预热
+:PROPERTIES:
+:NOTER_PAGE: (519 . 0.293801)
+:END:
+** 计算性能
+:PROPERTIES:
+:NOTER_PAGE: (521 . 0.092917)
+:END:
+*** 编译器和解释器
+:PROPERTIES:
+:NOTER_PAGE: (521 . 0.549937)
+:END:
+**** 符号式编程
+:PROPERTIES:
+:NOTER_PAGE: (522 . 0.499785)
+:END:
+**** 混合式编程
+:PROPERTIES:
+:NOTER_PAGE: (524 . 0.092917)
+:END:
+**** Sequential 的混合式编程
+:PROPERTIES:
+:NOTER_PAGE: (524 . 0.289331)
+:END:
+***** 通过混合式编程加速
+:PROPERTIES:
+:NOTER_PAGE: (525 . 0.266528)
+:END:
+***** 序列化
+:PROPERTIES:
+:NOTER_PAGE: (526 . 0.092917)
+:END:
+*** 异步计算
+:PROPERTIES:
+:NOTER_PAGE: (526 . 0.562576)
+:END:
+**** 通过后端异步处理
+:PROPERTIES:
+:NOTER_PAGE: (527 . 0.239848)
+:END:
+**** 障碍器与阻塞器
+:PROPERTIES:
+:NOTER_PAGE: (529 . 0.323826)
+:END:
+**** 改进计算
+:PROPERTIES:
+:NOTER_PAGE: (529 . 0.369634)
+:END:
+*** 自动并行
+:PROPERTIES:
+:NOTER_PAGE: (530 . 0.191755)
+:END:
+**** 基于 GPU 的并行计算
+:PROPERTIES:
+:NOTER_PAGE: (530 . 0.546263)
+:END:
+**** 并行计算与通信
+:PROPERTIES:
+:NOTER_PAGE: (531 . 0.642992)
+:END:
+*** 硬件
+:PROPERTIES:
+:NOTER_PAGE: (534 . 0.172273)
+:END:
+**** 计算机
+:PROPERTIES:
+:NOTER_PAGE: (535 . 0.092917)
+:END:
+**** 内存
+:PROPERTIES:
+:NOTER_PAGE: (535 . 0.721477)
+:END:
+**** 存储器
+:PROPERTIES:
+:NOTER_PAGE: (536 . 0.475051)
+:END:
+***** 硬盘驱动器
+:PROPERTIES:
+:NOTER_PAGE: (536 . 0.577753)
+:END:
+***** 固态驱动器
+:PROPERTIES:
+:NOTER_PAGE: (537 . 0.092917)
+:END:
+***** 云存储
+:PROPERTIES:
+:NOTER_PAGE: (537 . 0.421301)
+:END:
+**** CPU
+:PROPERTIES:
+:NOTER_PAGE: (537 . 0.522159)
+:END:
+***** 微体系结构
+:PROPERTIES:
+:NOTER_PAGE: (538 . 0.470278)
+:END:
+***** 矢量化
+:PROPERTIES:
+:NOTER_PAGE: (539 . 0.185227)
+:END:
+***** 缓存
+:PROPERTIES:
+:NOTER_PAGE: (539 . 0.627083)
+:END:
+**** GPU 和其他加速卡
+:PROPERTIES:
+:NOTER_PAGE: (540 . 0.711035)
+:END:
+**** 网络和总线
+:PROPERTIES:
+:NOTER_PAGE: (543 . 0.124924)
+:END:
+**** 更多延迟
+:PROPERTIES:
+:NOTER_PAGE: (543 . 0.593826)
+:END:
+*** 多 GPU 训练
+:PROPERTIES:
+:NOTER_PAGE: (546 . 0.152652)
+:END:
+**** 问题拆分
+:PROPERTIES:
+:NOTER_PAGE: (546 . 0.328119)
+:END:
+**** 数据并行性
+:PROPERTIES:
+:NOTER_PAGE: (548 . 0.092917)
+:END:
+**** 简单网络
+:PROPERTIES:
+:NOTER_PAGE: (549 . 0.092917)
+:END:
+**** 数据同步
+:PROPERTIES:
+:NOTER_PAGE: (549 . 0.698093)
+:END:
+**** 数据分发
+:PROPERTIES:
+:NOTER_PAGE: (551 . 0.092917)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (551 . 0.684722)
+:END:
+*** 多 GPU 的简洁实现
+:PROPERTIES:
+:NOTER_PAGE: (554 . 0.318662)
+:END:
+**** 简单网络
+:PROPERTIES:
+:NOTER_PAGE: (554 . 0.538699)
+:END:
+**** 网络初始化
+:PROPERTIES:
+:NOTER_PAGE: (555 . 0.448927)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (555 . 0.636806)
+:END:
+*** 参数服务器
+:PROPERTIES:
+:NOTER_PAGE: (558 . 0.092917)
+:END:
+**** 数据并行训练
+:PROPERTIES:
+:NOTER_PAGE: (558 . 0.319495)
+:END:
+**** 环同步（Ring Synchronization）
+:PROPERTIES:
+:NOTER_PAGE: (560 . 0.421654)
+:END:
+**** 多机训练
+:PROPERTIES:
+:NOTER_PAGE: (563 . 0.612083)
+:END:
+**** 键值存储
+:PROPERTIES:
+:NOTER_PAGE: (565 . 0.551023)
+:END:
+** 计算机视觉
+:PROPERTIES:
+:NOTER_PAGE: (567 . 0.092917)
+:END:
+*** 图像增广
+:PROPERTIES:
+:NOTER_PAGE: (567 . 0.696098)
+:END:
+**** 常用的图像增广方法
+:PROPERTIES:
+:NOTER_PAGE: (568 . 0.221869)
+:END:
+***** 翻转和裁剪
+:PROPERTIES:
+:NOTER_PAGE: (568 . 0.727715)
+:END:
+***** 改变颜色
+:PROPERTIES:
+:NOTER_PAGE: (570 . 0.29202)
+:END:
+***** 结合多种图像增广方法
+:PROPERTIES:
+:NOTER_PAGE: (571 . 0.412008)
+:END:
+**** 使用图像增广进行训练
+:PROPERTIES:
+:NOTER_PAGE: (572 . 0.092917)
+:END:
+***** 多 GPU 训练
+:PROPERTIES:
+:NOTER_PAGE: (573 . 0.238952)
+:END:
+*** 微调
+:PROPERTIES:
+:NOTER_PAGE: (575 . 0.643321)
+:END:
+**** 步骤
+:PROPERTIES:
+:NOTER_PAGE: (576 . 0.231073)
+:END:
+**** 热狗识别
+:PROPERTIES:
+:NOTER_PAGE: (577 . 0.092917)
+:END:
+***** 获取数据集
+:PROPERTIES:
+:NOTER_PAGE: (577 . 0.341604)
+:END:
+***** 定义和初始化模型
+:PROPERTIES:
+:NOTER_PAGE: (578 . 0.671149)
+:END:
+***** 微调模型
+:PROPERTIES:
+:NOTER_PAGE: (579 . 0.416187)
+:END:
+*** 目标检测和边界框
+:PROPERTIES:
+:NOTER_PAGE: (582 . 0.12548)
+:END:
+**** 边界框
+:PROPERTIES:
+:NOTER_PAGE: (583 . 0.092917)
+:END:
+*** 锚框
+:PROPERTIES:
+:NOTER_PAGE: (585 . 0.238548)
+:END:
+**** 生成多个锚框
+:PROPERTIES:
+:NOTER_PAGE: (585 . 0.541364)
+:END:
+**** 交并比（IoU）
+:PROPERTIES:
+:NOTER_PAGE: (588 . 0.603662)
+:END:
+**** 在训练数据中标注锚框
+:PROPERTIES:
+:NOTER_PAGE: (589 . 0.727247)
+:END:
+***** 将真实边界框分配给锚框
+:PROPERTIES:
+:NOTER_PAGE: (590 . 0.124924)
+:END:
+***** 标记类别和偏移量
+:PROPERTIES:
+:NOTER_PAGE: (591 . 0.563194)
+:END:
+***** 一个例子
+:PROPERTIES:
+:NOTER_PAGE: (593 . 0.092917)
+:END:
+**** 使用非极大值抑制预测边界框
+:PROPERTIES:
+:NOTER_PAGE: (594 . 0.565732)
+:END:
+*** 多尺度目标检测
+:PROPERTIES:
+:NOTER_PAGE: (599 . 0.092917)
+:END:
+**** 多尺度锚框
+:PROPERTIES:
+:NOTER_PAGE: (599 . 0.232096)
+:END:
+**** 多尺度检测
+:PROPERTIES:
+:NOTER_PAGE: (601 . 0.338649)
+:END:
+*** 目标检测数据集
+:PROPERTIES:
+:NOTER_PAGE: (602 . 0.470985)
+:END:
+**** 下载数据集
+:PROPERTIES:
+:NOTER_PAGE: (602 . 0.608093)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (603 . 0.203333)
+:END:
+**** 演示
+:PROPERTIES:
+:NOTER_PAGE: (605 . 0.092917)
+:END:
+*** 单发多框检测（SSD）
+:PROPERTIES:
+:NOTER_PAGE: (606 . 0.092917)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (606 . 0.232538)
+:END:
+***** 类别预测层
+:PROPERTIES:
+:NOTER_PAGE: (607 . 0.092917)
+:END:
+***** 边界框预测层
+:PROPERTIES:
+:NOTER_PAGE: (607 . 0.581717)
+:END:
+***** 连结多尺度的预测
+:PROPERTIES:
+:NOTER_PAGE: (607 . 0.749975)
+:END:
+***** 高和宽减半块
+:PROPERTIES:
+:NOTER_PAGE: (608 . 0.695379)
+:END:
+***** 基本网络块
+:PROPERTIES:
+:NOTER_PAGE: (609 . 0.439053)
+:END:
+***** 完整的模型
+:PROPERTIES:
+:NOTER_PAGE: (610 . 0.092917)
+:END:
+**** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (612 . 0.092917)
+:END:
+***** 读取数据集和初始化
+:PROPERTIES:
+:NOTER_PAGE: (612 . 0.165467)
+:END:
+***** 定义损失函数和评价函数
+:PROPERTIES:
+:NOTER_PAGE: (612 . 0.474861)
+:END:
+***** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (613 . 0.257841)
+:END:
+**** 预测目标
+:PROPERTIES:
+:NOTER_PAGE: (614 . 0.446591)
+:END:
+*** 区域卷积神经网络（R-CNN）系列
+:PROPERTIES:
+:NOTER_PAGE: (617 . 0.634634)
+:END:
+**** R-CNN
+:PROPERTIES:
+:NOTER_PAGE: (618 . 0.092917)
+:END:
+**** Fast R-CNN
+:PROPERTIES:
+:NOTER_PAGE: (619 . 0.092917)
+:END:
+**** Faster R-CNN
+:PROPERTIES:
+:NOTER_PAGE: (621 . 0.092917)
+:END:
+**** Mask R-CNN
+:PROPERTIES:
+:NOTER_PAGE: (622 . 0.092917)
+:END:
+*** 语义分割和数据集
+:PROPERTIES:
+:NOTER_PAGE: (623 . 0.25899)
+:END:
+**** 图像分割和实例分割
+:PROPERTIES:
+:NOTER_PAGE: (623 . 0.600328)
+:END:
+**** Pascal VOC2012 语义分割数据集
+:PROPERTIES:
+:NOTER_PAGE: (624 . 0.092917)
+:END:
+***** 预处理数据
+:PROPERTIES:
+:NOTER_PAGE: (626 . 0.744861)
+:END:
+***** 自定义语义分割数据集类
+:PROPERTIES:
+:NOTER_PAGE: (627 . 0.622904)
+:END:
+***** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (628 . 0.555947)
+:END:
+***** 整合所有组件
+:PROPERTIES:
+:NOTER_PAGE: (629 . 0.31971)
+:END:
+*** 转置卷积
+:PROPERTIES:
+:NOTER_PAGE: (630 . 0.218927)
+:END:
+**** 基本操作
+:PROPERTIES:
+:NOTER_PAGE: (630 . 0.505391)
+:END:
+**** 填充、步幅和多通道
+:PROPERTIES:
+:NOTER_PAGE: (632 . 0.186351)
+:END:
+**** 与矩阵变换的联系
+:PROPERTIES:
+:NOTER_PAGE: (633 . 0.472399)
+:END:
+*** 全卷积网络
+:PROPERTIES:
+:NOTER_PAGE: (635 . 0.218927)
+:END:
+**** 构造模型
+:PROPERTIES:
+:NOTER_PAGE: (635 . 0.532184)
+:END:
+**** 初始化转置卷积层
+:PROPERTIES:
+:NOTER_PAGE: (637 . 0.738775)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (639 . 0.467614)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (639 . 0.707803)
+:END:
+**** 预测
+:PROPERTIES:
+:NOTER_PAGE: (640 . 0.468422)
+:END:
+*** 风格迁移
+:PROPERTIES:
+:NOTER_PAGE: (642 . 0.292891)
+:END:
+**** 方法
+:PROPERTIES:
+:NOTER_PAGE: (643 . 0.092917)
+:END:
+**** 阅读内容和风格图像
+:PROPERTIES:
+:NOTER_PAGE: (643 . 0.744116)
+:END:
+**** 预处理和后处理
+:PROPERTIES:
+:NOTER_PAGE: (644 . 0.705366)
+:END:
+**** 抽取图像特征
+:PROPERTIES:
+:NOTER_PAGE: (645 . 0.358977)
+:END:
+**** 定义损失函数
+:PROPERTIES:
+:NOTER_PAGE: (646 . 0.634179)
+:END:
+***** 内容损失
+:PROPERTIES:
+:NOTER_PAGE: (646 . 0.719949)
+:END:
+***** 风格损失
+:PROPERTIES:
+:NOTER_PAGE: (647 . 0.092917)
+:END:
+***** 全变分损失
+:PROPERTIES:
+:NOTER_PAGE: (647 . 0.523194)
+:END:
+***** 损失函数
+:PROPERTIES:
+:NOTER_PAGE: (648 . 0.092917)
+:END:
+**** 初始化合成图像
+:PROPERTIES:
+:NOTER_PAGE: (648 . 0.427626)
+:END:
+**** 训练模型
+:PROPERTIES:
+:NOTER_PAGE: (649 . 0.092917)
+:END:
+*** 实战 Kaggle 比赛：图像分类 (CIFAR-10)
+:PROPERTIES:
+:NOTER_PAGE: (650 . 0.728535)
+:END:
+**** 获取并组织数据集
+:PROPERTIES:
+:NOTER_PAGE: (651 . 0.705)
+:END:
+***** 下载数据集
+:PROPERTIES:
+:NOTER_PAGE: (652 . 0.092917)
+:END:
+***** 整理数据集
+:PROPERTIES:
+:NOTER_PAGE: (652 . 0.698081)
+:END:
+**** 图像增广
+:PROPERTIES:
+:NOTER_PAGE: (654 . 0.640972)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (655 . 0.363611)
+:END:
+**** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (656 . 0.092917)
+:END:
+**** 定义训练函数
+:PROPERTIES:
+:NOTER_PAGE: (656 . 0.300795)
+:END:
+**** 训练和验证模型
+:PROPERTIES:
+:NOTER_PAGE: (657 . 0.26904)
+:END:
+**** 在 Kaggle 上对测试集进行分类并提交结果
+:PROPERTIES:
+:NOTER_PAGE: (658 . 0.092917)
+:END:
+*** 实战 Kaggle 比赛：狗的品种识别（ImageNet Dogs）
+:PROPERTIES:
+:NOTER_PAGE: (659 . 0.369848)
+:END:
+**** 获取和整理数据集
+:PROPERTIES:
+:NOTER_PAGE: (660 . 0.221869)
+:END:
+***** 下载数据集
+:PROPERTIES:
+:NOTER_PAGE: (660 . 0.32846)
+:END:
+***** 整理数据集
+:PROPERTIES:
+:NOTER_PAGE: (661 . 0.092917)
+:END:
+**** 图像增广
+:PROPERTIES:
+:NOTER_PAGE: (661 . 0.400833)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (662 . 0.215076)
+:END:
+**** 微调预训练模型
+:PROPERTIES:
+:NOTER_PAGE: (662 . 0.677412)
+:END:
+**** 定义训练函数
+:PROPERTIES:
+:NOTER_PAGE: (663 . 0.64072)
+:END:
+**** 训练和验证模型
+:PROPERTIES:
+:NOTER_PAGE: (664 . 0.682765)
+:END:
+**** 对测试集分类并在 Kaggle 提交结果
+:PROPERTIES:
+:NOTER_PAGE: (665 . 0.36952)
+:END:
+** 自然语言处理：预训练
+:PROPERTIES:
+:NOTER_PAGE: (667 . 0.092917)
+:END:
+*** 词嵌入（word2vec）
+:PROPERTIES:
+:NOTER_PAGE: (668 . 0.41673)
+:END:
+**** 为何独热向量是一个糟糕的选择
+:PROPERTIES:
+:NOTER_PAGE: (668 . 0.55298)
+:END:
+**** 自监督的 word2vec
+:PROPERTIES:
+:NOTER_PAGE: (669 . 0.092917)
+:END:
+**** 跳元模型（Skip-Gram）
+:PROPERTIES:
+:NOTER_PAGE: (669 . 0.270202)
+:END:
+***** 训练
+:PROPERTIES:
+:NOTER_PAGE: (670 . 0.125505)
+:END:
+**** 连续词袋（CBOW）模型
+:PROPERTIES:
+:NOTER_PAGE: (670 . 0.651023)
+:END:
+***** 训练
+:PROPERTIES:
+:NOTER_PAGE: (671 . 0.587462)
+:END:
+*** 近似训练
+:PROPERTIES:
+:NOTER_PAGE: (672 . 0.443813)
+:END:
+**** 负采样
+:PROPERTIES:
+:NOTER_PAGE: (672 . 0.67452)
+:END:
+**** 层序 Softmax
+:PROPERTIES:
+:NOTER_PAGE: (673 . 0.694066)
+:END:
+*** 用于预训练词嵌入的数据集
+:PROPERTIES:
+:NOTER_PAGE: (675 . 0.246098)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (675 . 0.502121)
+:END:
+**** 下采样
+:PROPERTIES:
+:NOTER_PAGE: (676 . 0.463295)
+:END:
+**** 中心词和上下文词的提取
+:PROPERTIES:
+:NOTER_PAGE: (678 . 0.344886)
+:END:
+**** 负采样
+:PROPERTIES:
+:NOTER_PAGE: (679 . 0.570593)
+:END:
+**** 小批量加载训练实例
+:PROPERTIES:
+:NOTER_PAGE: (681 . 0.092917)
+:END:
+**** 整合代码
+:PROPERTIES:
+:NOTER_PAGE: (682 . 0.277083)
+:END:
+*** 预训练 word2vec
+:PROPERTIES:
+:NOTER_PAGE: (684 . 0.092917)
+:END:
+**** 跳元模型
+:PROPERTIES:
+:NOTER_PAGE: (684 . 0.386692)
+:END:
+***** 嵌入层
+:PROPERTIES:
+:NOTER_PAGE: (684 . 0.473649)
+:END:
+***** 定义前向传播
+:PROPERTIES:
+:NOTER_PAGE: (685 . 0.259104)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (685 . 0.665808)
+:END:
+***** 二元交叉熵损失
+:PROPERTIES:
+:NOTER_PAGE: (685 . 0.752765)
+:END:
+***** 初始化模型参数
+:PROPERTIES:
+:NOTER_PAGE: (686 . 0.705063)
+:END:
+***** 定义训练阶段代码
+:PROPERTIES:
+:NOTER_PAGE: (687 . 0.092917)
+:END:
+**** 应用词嵌入
+:PROPERTIES:
+:NOTER_PAGE: (688 . 0.293801)
+:END:
+*** 全局向量的词嵌入（GloVe）
+:PROPERTIES:
+:NOTER_PAGE: (689 . 0.257563)
+:END:
+**** 带全局语料统计的跳元模型
+:PROPERTIES:
+:NOTER_PAGE: (689 . 0.413687)
+:END:
+**** GloVe 模型
+:PROPERTIES:
+:NOTER_PAGE: (690 . 0.165606)
+:END:
+**** 从条件概率比值理解 GloVe 模型
+:PROPERTIES:
+:NOTER_PAGE: (690 . 0.594571)
+:END:
+*** 子词嵌入
+:PROPERTIES:
+:NOTER_PAGE: (692 . 0.238548)
+:END:
+**** fastText 模型
+:PROPERTIES:
+:NOTER_PAGE: (692 . 0.413485)
+:END:
+**** 字节对编码（Byte Pair Encoding）
+:PROPERTIES:
+:NOTER_PAGE: (693 . 0.092917)
+:END:
+*** 词的相似性和类比任务
+:PROPERTIES:
+:NOTER_PAGE: (696 . 0.470985)
+:END:
+**** 加载预训练词向量
+:PROPERTIES:
+:NOTER_PAGE: (697 . 0.092917)
+:END:
+**** 应用预训练词向量
+:PROPERTIES:
+:NOTER_PAGE: (699 . 0.092917)
+:END:
+***** 词相似度
+:PROPERTIES:
+:NOTER_PAGE: (699 . 0.165467)
+:END:
+***** 词类比
+:PROPERTIES:
+:NOTER_PAGE: (700 . 0.236553)
+:END:
+*** 来自 Transformers 的双向编码器表示（BERT）
+:PROPERTIES:
+:NOTER_PAGE: (701 . 0.495694)
+:END:
+**** 从上下文无关到上下文敏感
+:PROPERTIES:
+:NOTER_PAGE: (701 . 0.631528)
+:END:
+**** 从特定于任务到不可知任务
+:PROPERTIES:
+:NOTER_PAGE: (702 . 0.223523)
+:END:
+**** BERT：把两个最好的结合起来
+:PROPERTIES:
+:NOTER_PAGE: (702 . 0.512765)
+:END:
+**** 输入表示
+:PROPERTIES:
+:NOTER_PAGE: (703 . 0.615215)
+:END:
+**** 预训练任务
+:PROPERTIES:
+:NOTER_PAGE: (706 . 0.092917)
+:END:
+***** 掩蔽语言模型（Masked Language Modeling）
+:PROPERTIES:
+:NOTER_PAGE: (706 . 0.202904)
+:END:
+***** 下一句预测（Next Sentence Prediction）
+:PROPERTIES:
+:NOTER_PAGE: (707 . 0.67399)
+:END:
+**** 整合代码
+:PROPERTIES:
+:NOTER_PAGE: (708 . 0.741717)
+:END:
+*** 用于预训练 BERT 的数据集
+:PROPERTIES:
+:NOTER_PAGE: (710 . 0.350101)
+:END:
+**** 为预训练任务定义辅助函数
+:PROPERTIES:
+:NOTER_PAGE: (711 . 0.286124)
+:END:
+***** 生成下一句预测任务的数据
+:PROPERTIES:
+:NOTER_PAGE: (711 . 0.391806)
+:END:
+***** 生成遮蔽语言模型任务的数据
+:PROPERTIES:
+:NOTER_PAGE: (712 . 0.197083)
+:END:
+**** 将文本转换为预训练数据集
+:PROPERTIES:
+:NOTER_PAGE: (713 . 0.455707)
+:END:
+*** 预训练 BERT
+:PROPERTIES:
+:NOTER_PAGE: (716 . 0.593207)
+:END:
+**** 预训练 BERT
+:PROPERTIES:
+:NOTER_PAGE: (717 . 0.092917)
+:END:
+**** 用 BERT 表示文本
+:PROPERTIES:
+:NOTER_PAGE: (719 . 0.358649)
+:END:
+** 自然语言处理：应用
+:PROPERTIES:
+:NOTER_PAGE: (721 . 0.092917)
+:END:
+*** 情感分析及数据集
+:PROPERTIES:
+:NOTER_PAGE: (722 . 0.330644)
+:END:
+**** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (722 . 0.692576)
+:END:
+**** 预处理数据集
+:PROPERTIES:
+:NOTER_PAGE: (723 . 0.666111)
+:END:
+**** 创建数据迭代器
+:PROPERTIES:
+:NOTER_PAGE: (724 . 0.593876)
+:END:
+**** 整合代码
+:PROPERTIES:
+:NOTER_PAGE: (725 . 0.092917)
+:END:
+*** 情感分析：使用循环神经网络
+:PROPERTIES:
+:NOTER_PAGE: (726 . 0.092917)
+:END:
+**** 使用循环神经网络表示单个文本
+:PROPERTIES:
+:NOTER_PAGE: (726 . 0.638043)
+:END:
+**** 加载预训练的词向量
+:PROPERTIES:
+:NOTER_PAGE: (728 . 0.092917)
+:END:
+**** 训练和评估模型
+:PROPERTIES:
+:NOTER_PAGE: (728 . 0.452235)
+:END:
+*** 情感分析：使用卷积神经网络
+:PROPERTIES:
+:NOTER_PAGE: (730 . 0.092917)
+:END:
+**** 一维卷积
+:PROPERTIES:
+:NOTER_PAGE: (730 . 0.740316)
+:END:
+**** 最大时间汇聚层
+:PROPERTIES:
+:NOTER_PAGE: (732 . 0.621351)
+:END:
+**** textCNN 模型
+:PROPERTIES:
+:NOTER_PAGE: (733 . 0.092917)
+:END:
+***** 定义模型
+:PROPERTIES:
+:NOTER_PAGE: (734 . 0.092917)
+:END:
+***** 加载预训练词向量
+:PROPERTIES:
+:NOTER_PAGE: (735 . 0.215076)
+:END:
+***** 训练和评估模型
+:PROPERTIES:
+:NOTER_PAGE: (735 . 0.505947)
+:END:
+*** 自然语言推断与数据集
+:PROPERTIES:
+:NOTER_PAGE: (737 . 0.092917)
+:END:
+**** 自然语言推断
+:PROPERTIES:
+:NOTER_PAGE: (737 . 0.23202)
+:END:
+**** 斯坦福自然语言推断（SNLI）数据集
+:PROPERTIES:
+:NOTER_PAGE: (737 . 0.749659)
+:END:
+***** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (738 . 0.347778)
+:END:
+***** 定义用于加载数据集的类
+:PROPERTIES:
+:NOTER_PAGE: (739 . 0.606566)
+:END:
+***** 整合代码
+:PROPERTIES:
+:NOTER_PAGE: (740 . 0.484899)
+:END:
+*** 自然语言推断：使用注意力
+:PROPERTIES:
+:NOTER_PAGE: (742 . 0.092917)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (742 . 0.470025)
+:END:
+***** 注意（Attending）
+:PROPERTIES:
+:NOTER_PAGE: (743 . 0.227273)
+:END:
+***** 比较
+:PROPERTIES:
+:NOTER_PAGE: (744 . 0.568649)
+:END:
+***** 聚合
+:PROPERTIES:
+:NOTER_PAGE: (745 . 0.26904)
+:END:
+***** 整合代码
+:PROPERTIES:
+:NOTER_PAGE: (746 . 0.092917)
+:END:
+**** 训练和评估模型
+:PROPERTIES:
+:NOTER_PAGE: (746 . 0.515922)
+:END:
+***** 读取数据集
+:PROPERTIES:
+:NOTER_PAGE: (746 . 0.602891)
+:END:
+***** 创建模型
+:PROPERTIES:
+:NOTER_PAGE: (747 . 0.092917)
+:END:
+***** 训练和评估模型
+:PROPERTIES:
+:NOTER_PAGE: (747 . 0.321326)
+:END:
+***** 使用模型
+:PROPERTIES:
+:NOTER_PAGE: (748 . 0.092917)
+:END:
+*** 针对序列级和词元级应用微调 BERT
+:PROPERTIES:
+:NOTER_PAGE: (749 . 0.092917)
+:END:
+**** 单文本分类
+:PROPERTIES:
+:NOTER_PAGE: (749 . 0.378359)
+:END:
+**** 文本对分类或回归
+:PROPERTIES:
+:NOTER_PAGE: (750 . 0.092917)
+:END:
+**** 文本标注
+:PROPERTIES:
+:NOTER_PAGE: (750 . 0.729697)
+:END:
+**** 问答
+:PROPERTIES:
+:NOTER_PAGE: (751 . 0.413864)
+:END:
+*** 自然语言推断：微调 BERT
+:PROPERTIES:
+:NOTER_PAGE: (752 . 0.626566)
+:END:
+**** 加载预训练的 BERT
+:PROPERTIES:
+:NOTER_PAGE: (753 . 0.514558)
+:END:
+**** 微调 BERT 的数据集
+:PROPERTIES:
+:NOTER_PAGE: (754 . 0.63178)
+:END:
+**** 微调 BERT
+:PROPERTIES:
+:NOTER_PAGE: (756 . 0.469886)
+:END:
+** 附录：深度学习工具
+:PROPERTIES:
+:NOTER_PAGE: (759 . 0.092917)
+:END:
+*** 使用 Jupyter Notebook
+:PROPERTIES:
+:NOTER_PAGE: (759 . 0.51101)
+:END:
+**** 在本地编辑和运行代码
+:PROPERTIES:
+:NOTER_PAGE: (759 . 0.627803)
+:END:
+**** 高级选项
+:PROPERTIES:
+:NOTER_PAGE: (763 . 0.508687)
+:END:
+***** Jupyter 中的 Markdown 文件
+:PROPERTIES:
+:NOTER_PAGE: (763 . 0.653131)
+:END:
+***** 在远程服务器上运行 Jupyter Notebook
+:PROPERTIES:
+:NOTER_PAGE: (764 . 0.27827)
+:END:
+***** 执行时间
+:PROPERTIES:
+:NOTER_PAGE: (764 . 0.496881)
+:END:
+*** 使用 Amazon SageMaker
+:PROPERTIES:
+:NOTER_PAGE: (765 . 0.246098)
+:END:
+**** 注册
+:PROPERTIES:
+:NOTER_PAGE: (765 . 0.381957)
+:END:
+**** 创建 SageMaker 实例
+:PROPERTIES:
+:NOTER_PAGE: (765 . 0.700732)
+:END:
+**** 运行和停止实例
+:PROPERTIES:
+:NOTER_PAGE: (767 . 0.092917)
+:END:
+**** 更新 Notebook
+:PROPERTIES:
+:NOTER_PAGE: (767 . 0.511073)
+:END:
+*** 使用 Amazon EC2 实例
+:PROPERTIES:
+:NOTER_PAGE: (768 . 0.43798)
+:END:
+**** 创建和运行 EC2 实例
+:PROPERTIES:
+:NOTER_PAGE: (768 . 0.683788)
+:END:
+***** 预置位置
+:PROPERTIES:
+:NOTER_PAGE: (769 . 0.679381)
+:END:
+***** 增加限制
+:PROPERTIES:
+:NOTER_PAGE: (770 . 0.092917)
+:END:
+***** 启动实例
+:PROPERTIES:
+:NOTER_PAGE: (770 . 0.443687)
+:END:
+***** 连接到实例
+:PROPERTIES:
+:NOTER_PAGE: (772 . 0.601654)
+:END:
+**** 安装 CUDA
+:PROPERTIES:
+:NOTER_PAGE: (773 . 0.665783)
+:END:
+**** 安装库以运行代码
+:PROPERTIES:
+:NOTER_PAGE: (775 . 0.092917)
+:END:
+**** 远程运行 Jupyter 笔记本
+:PROPERTIES:
+:NOTER_PAGE: (775 . 0.277247)
+:END:
+**** 关闭未使用的实例
+:PROPERTIES:
+:NOTER_PAGE: (776 . 0.092917)
+:END:
+*** 选择服务器和 GPU
+:PROPERTIES:
+:NOTER_PAGE: (776 . 0.668687)
+:END:
+**** 选择服务器
+:PROPERTIES:
+:NOTER_PAGE: (777 . 0.092917)
+:END:
+**** 选择 GPU
+:PROPERTIES:
+:NOTER_PAGE: (778 . 0.092917)
+:END:
+*** 为本书做贡献
+:PROPERTIES:
+:NOTER_PAGE: (781 . 0.092917)
+:END:
+**** 提交微小更改
+:PROPERTIES:
+:NOTER_PAGE: (781 . 0.253611)
+:END:
+**** 大量文本或代码修改
+:PROPERTIES:
+:NOTER_PAGE: (781 . 0.638207)
+:END:
+**** 提交主要更改
+:PROPERTIES:
+:NOTER_PAGE: (782 . 0.183813)
+:END:
+***** 安装 Git
+:PROPERTIES:
+:NOTER_PAGE: (782 . 0.480682)
+:END:
+***** 登录 GitHub
+:PROPERTIES:
+:NOTER_PAGE: (782 . 0.581528)
+:END:
+***** 克隆存储库
+:PROPERTIES:
+:NOTER_PAGE: (783 . 0.214874)
+:END:
+***** 编辑和推送
+:PROPERTIES:
+:NOTER_PAGE: (783 . 0.571073)
+:END:
+***** 提交 Pull 请求
+:PROPERTIES:
+:NOTER_PAGE: (784 . 0.257109)
+:END:
+*** d2l API 文档
+:PROPERTIES:
+:NOTER_PAGE: (785 . 0.412109)
+:END:
+**** 模型
+:PROPERTIES:
+:NOTER_PAGE: (785 . 0.509129)
+:END:
+**** 数据
+:PROPERTIES:
+:NOTER_PAGE: (785 . 0.553321)
+:END:
+**** 训练
+:PROPERTIES:
+:NOTER_PAGE: (785 . 0.592247)
+:END:
+**** 公用
+:PROPERTIES:
+:NOTER_PAGE: (785 . 0.631187)
+:END:
+** Bibliography
+:PROPERTIES:
+:NOTER_PAGE: (787 . 0.092917)
+:END:
